@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI图像超分辨率 - 盛世云图</title>
+    <meta name="description" content="使用AI技术提升图像分辨率和质量，支持多种图片格式">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/aisr.css">
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="aisr-container">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">AI图像超分辨率</h1>
+                <p class="page-subtitle">使用先进AI技术，将您的图像分辨率提升至4K甚至更高</p>
+            </div>
+
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7,10 12,15 17,10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </div>
+                        <h3 class="upload-title">拖拽图片到此处或点击上传</h3>
+                        <p class="upload-subtitle">支持 JPG、PNG、TIFF、BMP 格式，最大 100MB</p>
+                        <p class="api-info">🔗 已连接到 AI 超分辨率服务器</p>
+                        <button class="upload-btn" id="uploadBtn">选择文件</button>
+                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/tiff,image/bmp" style="display: none;">
+                    </div>
+                </div>
+                
+                <!-- Upload Progress -->
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">上传中...</div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-grid">
+                    <!-- Original Image -->
+                    <div class="result-card">
+                        <div class="result-header">
+                            <h3 class="result-title">原始图像</h3>
+                            <div class="result-info" id="originalInfo"></div>
+                        </div>
+                        <div class="result-image">
+                            <img id="originalImage" alt="原始图像">
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Image with Progress -->
+                    <div class="result-card">
+                        <div class="result-header">
+                            <h3 class="result-title">AI增强结果</h3>
+                            <div class="result-info" id="enhancedInfo"></div>
+                        </div>
+                        <div class="result-image">
+                            <img id="enhancedImage" alt="AI增强结果">
+                            
+                            <!-- Progress Overlay -->
+                            <div class="progress-overlay" id="progressOverlay">
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progressFill"></div>
+                                    </div>
+                                    <div class="progress-text" id="progressText">处理中...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn btn-primary" id="downloadBtn">下载结果</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usage Limit Info -->
+            <section class="limit-info">
+                <div class="limit-card">
+                    <div class="limit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <div class="limit-content">
+                        <h4>使用限制</h4>
+                        <p>每天可上传 <strong>20张</strong> 图像，单张图片最大 <strong>100MB</strong></p>
+                        <div class="limit-stats" id="limitStats">
+                            <span>今日已使用: <span id="usedCount">0</span>/20</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="scripts/components.js"></script>
+    <script src="scripts/aisr.js"></script>
+</body>
+</html>

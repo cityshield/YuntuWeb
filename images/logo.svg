@@ -1,0 +1,78 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 云朵渐变 -->
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#F8FAFC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E2E8F0;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 科技线条渐变 -->
+    <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 发光效果 -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 背景圆形 -->
+  <circle cx="30" cy="30" r="28" fill="url(#bgGradient)" stroke="url(#techGradient)" stroke-width="2"/>
+  
+  <!-- 主云朵 -->
+  <g transform="translate(15, 20)">
+    <!-- 云朵主体 -->
+    <path d="M8 12c-3 0-5.5-2.5-5.5-5.5S5 1 8 1c1.5 0 2.8 0.7 3.7 1.8C12.2 1.4 13.8 0.5 15.5 0.5c3.3 0 6 2.7 6 6 0 0.8-0.2 1.5-0.5 2.2C22.8 9.5 25 12 25 15c0 3.3-2.7 6-6 6H8c-3.3 0-6-2.7-6-6s2.7-6 6-6z" 
+          fill="url(#cloudGradient)" 
+          stroke="url(#techGradient)" 
+          stroke-width="0.5"/>
+    
+    <!-- 云朵内部高光 -->
+    <ellipse cx="12" cy="8" rx="4" ry="2.5" fill="rgba(255,255,255,0.6)"/>
+    <ellipse cx="18" cy="6" rx="3" ry="2" fill="rgba(255,255,255,0.4)"/>
+  </g>
+  
+  <!-- 科技线条装饰 -->
+  <g stroke="url(#techGradient)" stroke-width="1.5" fill="none" opacity="0.8" filter="url(#glow)">
+    <!-- 左上角线条 -->
+    <path d="M8 8 L15 8 M8 12 L18 12" stroke-linecap="round"/>
+    <!-- 右上角线条 -->
+    <path d="M45 8 L52 8 M42 12 L52 12" stroke-linecap="round"/>
+    <!-- 左下角线条 -->
+    <path d="M8 48 L15 48 M8 52 L18 52" stroke-linecap="round"/>
+    <!-- 右下角线条 -->
+    <path d="M45 48 L52 48 M42 52 L52 52" stroke-linecap="round"/>
+  </g>
+  
+  <!-- 中心科技点 -->
+  <g fill="url(#techGradient)" opacity="0.9">
+    <circle cx="30" cy="30" r="1.5"/>
+    <circle cx="25" cy="25" r="1"/>
+    <circle cx="35" cy="25" r="1"/>
+    <circle cx="25" cy="35" r="1"/>
+    <circle cx="35" cy="35" r="1"/>
+  </g>
+  
+  <!-- 连接线 -->
+  <g stroke="url(#techGradient)" stroke-width="0.8" fill="none" opacity="0.6">
+    <path d="M25 25 L30 30 L35 25" stroke-linecap="round"/>
+    <path d="M25 35 L30 30 L35 35" stroke-linecap="round"/>
+  </g>
+  
+  <!-- 外圈科技环 -->
+  <circle cx="30" cy="30" r="26" fill="none" stroke="url(#techGradient)" stroke-width="1" opacity="0.3" stroke-dasharray="2,2"/>
+</svg>

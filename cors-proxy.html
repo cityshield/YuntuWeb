@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS 代理测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { border-color: #4CAF50; background: #f1f8e9; }
+        .error { border-color: #f44336; background: #ffebee; }
+        .info { border-color: #2196F3; background: #e3f2fd; }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1976D2; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CORS 代理测试工具</h1>
+        <p>用于测试 API 连接和跨域问题</p>
+        
+        <div class="test-section info">
+            <h3>API 配置</h3>
+            <p><strong>API 地址:</strong> <span id="apiUrl">http://www.yuntucv.com:2345</span></p>
+            <p><strong>Token:</strong> <span id="apiToken">K8mN2pQ7vR9sT3wX</span></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>连接测试</h3>
+            <button onclick="testConnection()">测试连接</button>
+            <div id="connectionResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>图像处理测试</h3>
+            <input type="file" id="testFile" accept="image/*">
+            <button onclick="testImageProcessing()">测试图像处理</button>
+            <div id="processingResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>解决方案</h3>
+            <div>
+                <h4>如果出现 "Failed to fetch" 错误：</h4>
+                <ol>
+                    <li><strong>检查 API 服务状态</strong> - 确保后端服务正在运行</li>
+                    <li><strong>检查网络连接</strong> - 确保可以访问 API 服务器</li>
+                    <li><strong>检查 CORS 配置</strong> - 后端需要允许跨域请求</li>
+                    <li><strong>使用代理服务器</strong> - 通过同域代理转发请求</li>
+                </ol>
+                
+                <h4>后端 CORS 配置示例（Flask）：</h4>
+                <pre>from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app, origins=['*'])  # 允许所有来源</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://192.168.99.49:8000';
+        const API_TOKEN = 'K8mN2pQ7vR9sT3wX';
+        
+        async function testConnection() {
+            const resultDiv = document.getElementById('connectionResult');
+            resultDiv.innerHTML = '<p>测试中...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/health/`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <div class="test-section success">
+                            <h4>✅ 连接成功</h4>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="test-section error">
+                            <h4>❌ 连接失败</h4>
+                            <p>状态码: ${response.status}</p>
+                            <p>状态文本: ${response.statusText}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="test-section error">
+                        <h4>❌ 连接错误</h4>
+                        <p>错误类型: ${error.name}</p>
+                        <p>错误信息: ${error.message}</p>
+                        <p>可能原因: 网络连接问题、CORS 限制、服务不可用</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testImageProcessing() {
+            const fileInput = document.getElementById('testFile');
+            const resultDiv = document.getElementById('processingResult');
+            
+            if (!fileInput.files[0]) {
+                resultDiv.innerHTML = '<p style="color: red;">请先选择图片文件</p>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            resultDiv.innerHTML = '<p>处理中...</p>';
+            
+            try {
+                // 转换为 base64
+                const base64 = await fileToBase64(file);
+                
+                const payload = {
+                    image_base64: base64,
+                    token: API_TOKEN,
+                    input_format: getFormatFromMimeType(file.type),
+                    output_format: 'PNG'
+                };
+                
+                const response = await fetch(`${API_BASE_URL}/api/v1/super-resolution/swin_real_process`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        resultDiv.innerHTML = `
+                            <div class="test-section success">
+                                <h4>✅ 图像处理成功</h4>
+                                <p>原始尺寸: ${data.original_size}</p>
+                                <p>输出尺寸: ${data.output_size}</p>
+                                <p>放大倍数: ${data.scale_factor}</p>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="test-section error">
+                                <h4>❌ 处理失败</h4>
+                                <p>错误信息: ${data.message || data.detail}</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    resultDiv.innerHTML = `
+                        <div class="test-section error">
+                            <h4>❌ 请求失败</h4>
+                            <p>状态码: ${response.status}</p>
+                            <p>错误信息: ${errorData.detail || errorData.message || response.statusText}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="test-section error">
+                        <h4>❌ 处理错误</h4>
+                        <p>错误类型: ${error.name}</p>
+                        <p>错误信息: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function getFormatFromMimeType(mimeType) {
+            const formatMap = {
+                'image/jpeg': 'JPEG',
+                'image/jpg': 'JPEG',
+                'image/png': 'PNG',
+                'image/tiff': 'TIFF',
+                'image/bmp': 'BMP'
+            };
+            return formatMap[mimeType] || 'PNG';
+        }
+        
+        // 页面加载时自动测试连接
+        window.onload = () => {
+            testConnection();
+        };
+    </script>
+</body>
+</html>
+

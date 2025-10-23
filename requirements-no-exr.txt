@@ -1,0 +1,14 @@
+# Flask web framework
+Flask==2.2.5
+flask-cors==3.0.10
+
+# HTTP requests
+requests==2.28.2
+
+# Image processing (without OpenEXR)
+Pillow==9.5.0
+
+# Note: OpenEXR support removed due to system dependency issues
+# If EXR support is needed, install system dependencies first:
+# - On CentOS: yum install -y OpenEXR-devel ilmbase-devel
+# - On Ubuntu: apt-get install -y libopenexr-dev

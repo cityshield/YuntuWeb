@@ -1,0 +1,98 @@
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a href="index.html#home">
+                <img src="images/logo.svg" alt="盛世云图" class="logo-img">
+                       <span class="logo-text">盛世云图</span>
+            </a>
+        </div>
+        <ul class="nav-menu" id="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link">首页</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.html#products" class="nav-link">产品服务</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.html#about" class="nav-link">关于我们</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.html#cases" class="nav-link">客户案例</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.html#contact" class="nav-link">联系我们</a>
+            </li>
+        </ul>
+
+        <!-- 右侧操作区域：登录 + 主题切换 -->
+        <div class="nav-actions">
+            <!-- 未登录状态 -->
+            <a href="auth.html" class="nav-link nav-button" id="login-button">登录</a>
+
+            <!-- 已登录状态 -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <button class="user-menu-trigger" id="user-menu-trigger">
+                    <span class="user-name" id="user-name">用户</span>
+                    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- 下拉菜单 -->
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="dropdown-header">
+                        <div class="user-avatar" id="user-avatar">
+                            <span class="avatar-placeholder">👤</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-display-name" id="user-display-name">用户</p>
+                            <p class="user-phone" id="user-phone-display">153****2988</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">
+                                <span class="dropdown-icon">📊</span>
+                                <span>控制台</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="account-settings.html" class="dropdown-link">
+                                <span class="dropdown-icon">⚙️</span>
+                                <span>账户设置</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">
+                                <span class="dropdown-icon">💳</span>
+                                <span>财务管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-logout" id="logout-button">
+                        <span class="dropdown-icon">🚪</span>
+                        <span>退出登录</span>
+                    </button>
+                </div>
+            </div>
+
+            <button id="theme-toggle" class="theme-toggle" aria-label="切换主题" title="切换主题">
+                <!-- 对齐 shadcn 首页右侧"线条按钮"风格的对比度图标（stroke 图标，随 currentColor 变色） -->
+                <svg class="theme-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 3v18" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 3a9 9 0 0 1 0 18" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+        </div>
+        <div class="nav-toggle" id="nav-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+</nav>
+

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盛世云图 - AI图像超分辨率服务</title>
+    <meta name="description" content="专业的AI图像超分辨率服务，为影视动漫行业提供高速GPU渲染云服务">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- AOS Animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="images/banner/a.jpg" alt="Banner A" class="hero-slide-img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/banner/b.jpg" alt="Banner B" class="hero-slide-img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/banner/c.jpg" alt="Banner C" class="hero-slide-img">
+                    </div>
+                </div>
+                <div class="hero-swiper-pagination"></div>
+                <div class="hero-swiper-button hero-swiper-prev"></div>
+                <div class="hero-swiper-button hero-swiper-next"></div>
+            </div>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="hero-title gloss-text" data-aos="fade-up" data-aos-duration="1000">
+                    平价好用的AI，服务于创作<br>
+                    <span class="highlight">盛世云图</span>
+                </h1>
+                <div class="hero-subtitle" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                    <p class="subtitle-main">专注于为影视动漫行业提供高速AI渲染云服务</p>
+                    <p class="subtitle-detail">以及AI图像处理、AI视频增强、AI建模等革命性技术解决方案</p>
+                </div>
+                <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+                    <a href="#products" class="btn btn-primary">了解产品</a>
+                    <a href="#contact" class="btn btn-secondary">联系我们</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">核心产品与服务</h2>
+                <p class="section-subtitle">基于先进AI技术，为影视动漫行业提供全方位的技术解决方案</p>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="product-icon">
+                        <img src="images/icons/gpu-render.svg" alt="GPU渲染云">
+                    </div>
+                    <h3 class="product-title">高速GPU渲染云</h3>
+                    <p class="product-description">专为影视动漫行业打造的高性能GPU渲染云服务，提供强大的计算能力和稳定的渲染环境。</p>
+                    <ul class="product-features">
+                        <li>高性能GPU集群</li>
+                        <li>24/7稳定服务</li>
+                        <li>弹性扩展能力</li>
+                        <li>专业技术支持</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="product-icon">
+                        <img src="images/icons/image-enhance.svg" alt="AI图像质量提升">
+                    </div>
+                    <h3 class="product-title">AI图像质量提升</h3>
+                    <p class="product-description">运用深度学习技术，智能提升图像和视频的画面质量与分辨率，让每一帧都更加清晰。</p>
+                    <ul class="product-features">
+                        <li>智能超分辨率</li>
+                        <li>画质增强优化</li>
+                        <li>批量处理能力</li>
+                        <li>实时预览效果</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="product-icon">
+                        <img src="images/icons/video-frame.svg" alt="AI视频增强">
+                    </div>
+                    <h3 class="product-title">AI视频增强</h3>
+                    <p class="product-description">基于先进的AI算法，为视频内容提供智能增强服务，提升视频质量和观看体验。</p>
+                    <ul class="product-features">
+                        <li>帧率提升技术</li>
+                        <li>画质智能优化</li>
+                        <li>噪声去除算法</li>
+                        <li>色彩增强处理</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="product-icon">
+                        <img src="images/icons/3d-model.svg" alt="AI 3D建模">
+                    </div>
+                    <h3 class="product-title">AI 3D建模</h3>
+                    <p class="product-description">利用AI技术快速生成高质量3D模型，为游戏开发和影视制作提供强大的建模支持。</p>
+                    <ul class="product-features">
+                        <li>快速模型生成</li>
+                        <li>高质量纹理</li>
+                        <li>自动化优化</li>
+                        <li>多格式导出</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="product-icon">
+                        <img src="images/icons/3d-animation.svg" alt="AI动作捕捉">
+                    </div>
+                    <h3 class="product-title">AI动作捕捉</h3>
+                    <p class="product-description">先进的AI动作捕捉技术，为动画制作和游戏开发提供精准的动作数据支持。</p>
+                    <ul class="product-features">
+                        <li>实时动作捕捉</li>
+                        <li>高精度数据</li>
+                        <li>多角色支持</li>
+                        <li>云端处理能力</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="product-icon">
+                        <img src="images/icons/effects.svg" alt="AI特效生成">
+                    </div>
+                    <h3 class="product-title">AI特效生成</h3>
+                    <p class="product-description">智能生成各种视觉特效，为影视制作和游戏开发提供丰富的特效资源。</p>
+                    <ul class="product-features">
+                        <li>智能特效生成</li>
+                        <li>多样化效果</li>
+                        <li>实时渲染</li>
+                        <li>自定义参数</li>
+                    </ul>
+                    <a href="https://yuntucv.com/aisr" target="_blank" class="product-cta btn-link">立即试用 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">关于我们</h2>
+                <p class="section-subtitle">专业的AI技术服务团队，致力于为影视动漫行业提供最先进的技术解决方案</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text" data-aos="fade-right" data-aos-delay="200">
+                    <h3>技术实力</h3>
+                    <p>我们拥有强大的AI技术研发团队，在图像处理、视频增强、3D建模等领域积累了丰富的经验。通过不断的技术创新，为客户提供最优质的服务。</p>
+                    
+                    <h3>行业经验</h3>
+                    <p>深耕影视动漫行业多年，深刻理解行业需求和技术挑战。我们的解决方案已经成功应用于多个知名项目，获得了客户的一致好评。</p>
+                    
+                    <h3>服务承诺</h3>
+                    <p>7×24小时专业技术支持，快速响应客户需求。我们承诺为客户提供稳定、高效、安全的技术服务。</p>
+                </div>
+                
+                <div class="about-images" data-aos="fade-left" data-aos-delay="400">
+                    <div class="image-grid">
+                        <div class="image-item">
+                            <img src="images/office/office.png" alt="办公环境">
+                        </div>
+                        <div class="image-item">
+                            <img src="images/office/cmds.png" alt="技术团队">
+                        </div>
+                        <div class="image-item">
+                            <img src="images/office/team.png" alt="团队协作">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cases Section -->
+    <section id="cases" class="cases">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">客户案例</h2>
+                <p class="section-subtitle">看看我们如何帮助客户实现技术突破和业务增长</p>
+            </div>
+            
+            <div class="cases-slider" data-aos="fade-up" data-aos-delay="200">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="case-card">
+                                <div class="case-image">
+                                    <img src="images/cases/case-1.svg" alt="案例1">
+                                </div>
+                                <div class="case-content">
+                                    <h3>某知名动画工作室</h3>
+                                    <p>通过我们的AI渲染云服务，渲染效率提升了300%，项目交付时间缩短了一半。</p>
+                                    <div class="case-stats">
+                                        <div class="stat">
+                                            <span class="stat-number">300%</span>
+                                            <span class="stat-label">效率提升</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-number">50%</span>
+                                            <span class="stat-label">时间节省</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-slide">
+                            <div class="case-card">
+                                <div class="case-image">
+                                    <img src="images/cases/case-2.svg" alt="案例2">
+                                </div>
+                                <div class="case-content">
+                                    <h3>游戏开发公司</h3>
+                                    <p>使用我们的AI 3D建模技术，模型制作周期从3个月缩短到3周，大幅降低了开发成本。</p>
+                                    <div class="case-stats">
+                                        <div class="stat">
+                                            <span class="stat-number">75%</span>
+                                            <span class="stat-label">周期缩短</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-number">60%</span>
+                                            <span class="stat-label">成本降低</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-slide">
+                            <div class="case-card">
+                                <div class="case-image">
+                                    <img src="images/cases/case-3.svg" alt="案例3">
+                                </div>
+                                <div class="case-content">
+                                    <h3>影视制作公司</h3>
+                                    <p>借助我们的AI视频增强技术，老旧影片的画质得到了显著提升，重新焕发了商业价值。</p>
+                                    <div class="case-stats">
+                                        <div class="stat">
+                                            <span class="stat-number">4K</span>
+                                            <span class="stat-label">分辨率提升</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-number">200%</span>
+                                            <span class="stat-label">价值提升</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">联系我们</h2>
+                <p class="section-subtitle">准备好开始您的AI技术之旅了吗？立即联系我们获取专业的技术支持</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info" data-aos="fade-right" data-aos-delay="200">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="images/icons/location.svg" alt="地址">
+                        </div>
+                        <div class="contact-details">
+                            <h4>公司地址</h4>
+                            <p>江苏省苏州市工业园区现代传媒大厦 22 层</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="images/icons/phone.svg" alt="电话">
+                        </div>
+                        <div class="contact-details">
+                            <h4>联系电话</h4>
+                            <p>+86 15381272988</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <img src="images/icons/email.svg" alt="邮箱">
+                        </div>
+                        <div class="contact-details">
+                            <h4>邮箱地址</h4>
+                            <p>daniu@yuntucv.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form" data-aos="fade-left" data-aos-delay="400">
+                    <form class="form">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="您的姓名" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="您的邮箱" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" name="phone" placeholder="联系电话">
+                        </div>
+                        <div class="form-group">
+                            <select id="service" name="service" required>
+                                <option value="">选择服务类型</option>
+                                <option value="gpu-render">GPU渲染云</option>
+                                <option value="image-enhance">AI图像增强</option>
+                                <option value="video-enhance">AI视频增强</option>
+                                <option value="3d-modeling">AI 3D建模</option>
+                                <option value="motion-capture">AI动作捕捉</option>
+                                <option value="effects">AI特效生成</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="请描述您的需求" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+    <script src="scripts/components.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>

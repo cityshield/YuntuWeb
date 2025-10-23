@@ -1,0 +1,7 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 骨骼/关键帧符号，表示动作/动画 -->
+  <circle cx="12" cy="7" r="3"/>
+  <path d="M12 10v7"/>
+  <path d="M8 14l4-4 4 4"/>
+  <path d="M8 18l4-4 4 4"/>
+</svg>

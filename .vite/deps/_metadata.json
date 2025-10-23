@@ -1,0 +1,25 @@
+{
+  "hash": "a71d85be",
+  "configHash": "64c96629",
+  "lockfileHash": "f9a778d3",
+  "browserHash": "4778528d",
+  "optimized": {
+    "aos": {
+      "src": "../../node_modules/aos/dist/aos.js",
+      "file": "aos.js",
+      "fileHash": "c086b667",
+      "needsInterop": true
+    },
+    "swiper": {
+      "src": "../../node_modules/swiper/swiper.mjs",
+      "file": "swiper.js",
+      "fileHash": "009fce34",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-BUSYA2B4": {
+      "file": "chunk-BUSYA2B4.js"
+    }
+  }
+}

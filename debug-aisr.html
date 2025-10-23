@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AISR调试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AISR功能调试页面</h1>
+    
+    <div class="container">
+        <h2>1. API连接测试</h2>
+        <div class="test-section info">
+            <button onclick="testAPIHealth()">测试健康检查</button>
+            <button onclick="testUsageStats()">测试使用统计</button>
+            <div id="apiResults" class="log"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>2. 图片上传测试</h2>
+        <div class="test-section info">
+            <input type="file" id="testFile" accept="image/*">
+            <button onclick="testImageUpload()">测试图片上传</button>
+            <div id="uploadResults" class="log"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>3. 结果显示测试</h2>
+        <div class="test-section info">
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <h3>原始图片</h3>
+                    <img id="originalTest" style="display: none;">
+                </div>
+                <div style="flex: 1;">
+                    <h3>增强结果</h3>
+                    <img id="enhancedTest" style="display: none;">
+                </div>
+            </div>
+            <div id="displayResults" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let log = (elementId, message, type = 'info') => {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            element.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>\n`;
+            element.scrollTop = element.scrollHeight;
+        };
+
+        async function testAPIHealth() {
+            log('apiResults', '开始测试API健康检查...');
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                log('apiResults', `健康检查成功: ${JSON.stringify(data)}`, 'success');
+            } catch (error) {
+                log('apiResults', `健康检查失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUsageStats() {
+            log('apiResults', '开始测试使用统计...');
+            try {
+                const response = await fetch('/api/usage-stats');
+                const data = await response.json();
+                log('apiResults', `使用统计成功: ${JSON.stringify(data)}`, 'success');
+            } catch (error) {
+                log('apiResults', `使用统计失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testImageUpload() {
+            const fileInput = document.getElementById('testFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                log('uploadResults', '请先选择一个图片文件', 'error');
+                return;
+            }
+
+            log('uploadResults', `开始上传文件: ${file.name} (${file.size} bytes)`);
+            
+            try {
+                // 显示原始图片
+                const originalImg = document.getElementById('originalTest');
+                originalImg.src = URL.createObjectURL(file);
+                originalImg.style.display = 'block';
+                
+                // 转换为base64
+                const base64 = await fileToBase64(file);
+                log('uploadResults', `Base64转换成功，长度: ${base64.length}`);
+                
+                // 发送到API
+                const payload = {
+                    image: base64,
+                    input_format: getFormatFromMimeType(file.type, file.name),
+                    filename: file.name
+                };
+                
+                log('uploadResults', `发送请求到API...`);
+                const response = await fetch('/api/aisr-process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                log('uploadResults', `API响应状态: ${response.status}`);
+                const result = await response.json();
+                
+                if (result.error) {
+                    log('uploadResults', `API处理失败: ${result.message}`, 'error');
+                } else {
+                    log('uploadResults', `API处理成功! 结果大小: ${result.size}`, 'success');
+                    
+                    // 显示增强结果
+                    const enhancedImg = document.getElementById('enhancedTest');
+                    enhancedImg.src = `data:${result.mimeType};base64,${result.image}`;
+                    enhancedImg.style.display = 'block';
+                    
+                    log('displayResults', `增强结果显示成功，MIME类型: ${result.mimeType}`, 'success');
+                }
+                
+            } catch (error) {
+                log('uploadResults', `上传失败: ${error.message}`, 'error');
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getFormatFromMimeType(mimeType, fileName) {
+            if (mimeType === 'image/jpeg' || fileName.toLowerCase().endsWith('.jpg') || fileName.toLowerCase().endsWith('.jpeg')) {
+                return 'JPEG';
+            } else if (mimeType === 'image/png' || fileName.toLowerCase().endsWith('.png')) {
+                return 'PNG';
+            } else if (mimeType === 'image/tiff' || fileName.toLowerCase().endsWith('.tiff') || fileName.toLowerCase().endsWith('.tif')) {
+                return 'TIFF';
+            } else if (mimeType === 'image/bmp' || fileName.toLowerCase().endsWith('.bmp')) {
+                return 'BMP';
+            } else if (mimeType === 'image/x-exr' || fileName.toLowerCase().endsWith('.exr')) {
+                return 'EXR';
+            }
+            return 'PNG'; // 默认
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账户设置 - 盛世云图</title>
+    <meta name="description" content="管理您的盛世云图账户设置">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/account-settings.css">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Account Settings Section -->
+    <section class="settings-section">
+        <div class="container">
+            <div class="settings-container" data-aos="fade-up">
+                <!-- Settings Sidebar -->
+                <aside class="settings-sidebar">
+                    <h2 class="sidebar-title">账户设置</h2>
+                    <nav class="settings-nav">
+                        <a href="#profile" class="nav-item">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">个人信息</span>
+                        </a>
+                        <a href="#security" class="nav-item active">
+                            <span class="nav-icon">🔒</span>
+                            <span class="nav-text">账号安全</span>
+                        </a>
+                        <a href="#billing" class="nav-item">
+                            <span class="nav-icon">💳</span>
+                            <span class="nav-text">账单记录</span>
+                        </a>
+                        <a href="#preferences" class="nav-item">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">偏好设置</span>
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Settings Content -->
+                <main class="settings-content">
+                    <!-- Security Settings -->
+                    <div class="settings-panel" id="security">
+                        <div class="panel-header">
+                            <h3>账号安全</h3>
+                            <p class="panel-description">管理您的登录方式和账号安全设置</p>
+                        </div>
+
+                        <!-- Wechat Binding Section -->
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <div class="setting-icon wechat">💬</div>
+                                <div class="setting-info">
+                                    <h4>微信账号</h4>
+                                    <p class="setting-description">绑定微信账号后可以通过微信扫码快速登录</p>
+                                </div>
+                            </div>
+
+                            <div class="setting-content" id="wechatBindingSection">
+                                <!-- 未绑定状态 -->
+                                <div class="binding-status unbind" id="unbindStatus">
+                                    <div class="status-badge">
+                                        <span class="badge unbound">未绑定</span>
+                                    </div>
+                                    <button class="btn btn-primary" id="bindWechatBtn">
+                                        <span class="btn-text">绑定微信</span>
+                                    </button>
+                                </div>
+
+                                <!-- 已绑定状态 -->
+                                <div class="binding-status bound" id="boundStatus" style="display: none;">
+                                    <div class="bound-info">
+                                        <div class="wechat-avatar" id="wechatAvatar">
+                                            <img src="" alt="微信头像" id="avatarImg">
+                                        </div>
+                                        <div class="bound-details">
+                                            <p class="wechat-nickname" id="wechatNickname">微信用户</p>
+                                            <p class="bound-time">
+                                                <span class="label">绑定时间：</span>
+                                                <span id="boundTime">-</span>
+                                            </p>
+                                            <div class="status-badge">
+                                                <span class="badge bound-badge">已绑定</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger-outline" id="unbindWechatBtn">
+                                        <span class="btn-text">解除绑定</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Change Section -->
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <div class="setting-icon password">🔑</div>
+                                <div class="setting-info">
+                                    <h4>登录密码</h4>
+                                    <p class="setting-description">定期更换密码可以提高账号安全性</p>
+                                </div>
+                            </div>
+
+                            <div class="setting-content">
+                                <button class="btn btn-secondary">
+                                    <span class="btn-text">修改密码</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Phone Binding Section -->
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <div class="setting-icon phone">📱</div>
+                                <div class="setting-info">
+                                    <h4>手机号</h4>
+                                    <p class="setting-description">用于登录和接收重要通知</p>
+                                </div>
+                            </div>
+
+                            <div class="setting-content">
+                                <div class="phone-info">
+                                    <span class="phone-number" id="phoneNumber">153****2988</span>
+                                    <span class="verified-badge">✓ 已验证</span>
+                                </div>
+                                <button class="btn btn-secondary">
+                                    <span class="btn-text">更换手机号</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Wechat Bind Modal -->
+    <div class="wechat-bind-modal" id="wechatBindModal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>绑定微信账号</h3>
+                <button class="modal-close" id="closeBindModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="qr-code-container">
+                    <div id="bindQRCode"></div>
+                </div>
+                <p class="modal-tip">请使用微信扫描二维码进行绑定</p>
+                <p class="modal-status" id="bindStatus">等待扫码...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Unbind Modal -->
+    <div class="confirm-modal" id="confirmUnbindModal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>确认解除绑定</h3>
+                <button class="modal-close" id="closeUnbindModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="confirm-message">解除绑定后，您将无法使用微信扫码登录。确定要解除绑定吗？</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancelUnbind">
+                        <span class="btn-text">取消</span>
+                    </button>
+                    <button class="btn btn-danger" id="confirmUnbind">
+                        <span class="btn-text">确认解除</span>
+                        <span class="btn-loading" style="display: none;">解除中...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs2@0.0.2/qrcode.min.js"></script>
+    <script src="scripts/components.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/api-config.js"></script>
+    <script src="scripts/wechat-login.js"></script>
+    <script src="scripts/account-settings.js"></script>
+</body>
+</html>

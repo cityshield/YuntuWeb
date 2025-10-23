@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>强制刷新页面 - 盛世云图</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #1d4ed8;
+        }
+        .button.secondary {
+            background: #6b7280;
+        }
+        .button.secondary:hover {
+            background: #4b5563;
+        }
+        .info {
+            background: #e0f2fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 强制刷新工具</h1>
+        
+        <div class="info">
+            <strong>说明：</strong>如果您遇到样式显示问题，请使用以下工具强制清除缓存并重新加载页面。
+        </div>
+        
+        <button class="button" onclick="clearCacheAndReload()">
+            🧹 清除缓存并重新加载
+        </button>
+        
+        <button class="button secondary" onclick="goToHomePage()">
+            🏠 返回首页
+        </button>
+        
+        <button class="button secondary" onclick="goToAuthPage()">
+            🔐 前往登录注册页面
+        </button>
+        
+        <div class="info">
+            <strong>手动方法：</strong><br>
+            • Windows/Linux: 按 <kbd>Ctrl + F5</kbd><br>
+            • Mac: 按 <kbd>Cmd + Shift + R</kbd><br>
+            • 或者按 <kbd>F12</kbd> 打开开发者工具，右键刷新按钮选择"清空缓存并硬性重新加载"
+        </div>
+    </div>
+
+    <script>
+        function clearCacheAndReload() {
+            // 清除所有类型的缓存
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                });
+            }
+            
+            // 清除localStorage
+            localStorage.clear();
+            
+            // 清除sessionStorage
+            sessionStorage.clear();
+            
+            // 显示提示
+            alert('缓存已清除，页面即将重新加载...');
+            
+            // 强制重新加载
+            window.location.reload(true);
+        }
+        
+        function goToHomePage() {
+            window.location.href = 'index.html?t=' + Date.now();
+        }
+        
+        function goToAuthPage() {
+            window.location.href = 'auth.html?t=' + Date.now();
+        }
+        
+        // 页面加载时自动清除一些缓存
+        window.addEventListener('load', function() {
+            // 清除旧的缓存
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        if (name.includes('vite') || name.includes('dev')) {
+                            caches.delete(name);
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

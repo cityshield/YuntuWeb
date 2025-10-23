@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>控制台 - 盛世云图</title>
+    <meta name="description" content="盛世云图控制台 - 批量文件上传任务管理">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/console.css">
+</head>
+<body class="console-body">
+    <!-- Console Container -->
+    <div class="console-container">
+        <!-- Sidebar -->
+        <aside class="console-sidebar" id="console-sidebar">
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <img src="images/logo.svg" alt="盛世云图" class="logo-img">
+                <span class="logo-text">盛世云图</span>
+            </div>
+
+            <!-- User Card -->
+            <div class="user-card">
+                <div class="user-avatar" id="sidebar-user-avatar">
+                    <span class="avatar-placeholder">👤</span>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebar-user-name">加载中...</div>
+                    <div class="user-phone" id="sidebar-user-phone">---</div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>仪表板</span>
+                </a>
+                <a href="#tasks" class="nav-item" data-section="tasks">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        <path d="M9 12h6m-6 4h6"/>
+                    </svg>
+                    <span>上传任务</span>
+                </a>
+                <a href="aisr.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span>AI超分辨率</span>
+                </a>
+                <a href="account-settings.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-6.364 0l-4.243 4.243m12.728 0l-4.243-4.243m-6.364 0L3.636 17.636"/>
+                    </svg>
+                    <span>账户设置</span>
+                </a>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logout-btn">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m7 14l5-5-5-5m5 5H9"/>
+                    </svg>
+                    <span>退出登录</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="console-main">
+            <!-- Top Bar -->
+            <header class="console-header">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+                <nav class="breadcrumb">
+                    <span class="breadcrumb-item">控制台</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item active" id="breadcrumb-current">仪表板</span>
+                </nav>
+
+                <div class="header-user">
+                    <div class="user-avatar-small" id="header-user-avatar">
+                        <span>👤</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="console-content">
+                <!-- Dashboard Section -->
+                <section id="section-dashboard" class="content-section active">
+                    <h1 class="section-title">仪表板</h1>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">总任务数</div>
+                                <div class="stat-value" id="stat-total-tasks">--</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-success">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">进行中</div>
+                                <div class="stat-value" id="stat-active-tasks">--</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">已完成</div>
+                                <div class="stat-value" id="stat-completed-tasks">--</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-warning">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-label">总文件数</div>
+                                <div class="stat-value" id="stat-total-files">--</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h2 class="subsection-title">快捷操作</h2>
+                        <div class="action-buttons">
+                            <button class="action-btn action-btn-primary" id="btn-new-task">
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>新建上传任务</span>
+                            </button>
+                            <button class="action-btn action-btn-secondary" id="btn-scan-drives">
+                                <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                                </svg>
+                                <span>扫描本地盘符</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Tasks -->
+                    <div class="recent-tasks">
+                        <h2 class="subsection-title">最近任务</h2>
+                        <div class="task-list" id="recent-task-list">
+                            <div class="loading-placeholder">
+                                <div class="spinner"></div>
+                                <span>加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tasks Section -->
+                <section id="section-tasks" class="content-section">
+                    <h1 class="section-title">上传任务</h1>
+
+                    <!-- Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-group">
+                            <select class="filter-select" id="filter-status">
+                                <option value="">全部状态</option>
+                                <option value="pending">待上传</option>
+                                <option value="uploading">上传中</option>
+                                <option value="completed">已完成</option>
+                                <option value="failed">失败</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                            <input type="text" class="filter-search" id="filter-search" placeholder="搜索任务名称...">
+                            <button class="filter-btn" id="btn-filter">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="action-btn action-btn-primary action-btn-sm" id="btn-new-task-2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <span>新建任务</span>
+                        </button>
+                    </div>
+
+                    <!-- Tasks Grid -->
+                    <div class="tasks-grid" id="tasks-grid">
+                        <div class="loading-placeholder">
+                            <div class="spinner"></div>
+                            <span>加载中...</span>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <button class="pagination-btn" id="btn-prev-page" disabled>上一页</button>
+                        <div class="pagination-info">
+                            <span id="pagination-text">第 1 页，共 1 页</span>
+                        </div>
+                        <button class="pagination-btn" id="btn-next-page" disabled>下一页</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div class="modal" id="task-detail-modal">
+        <div class="modal-overlay" id="task-detail-overlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">任务详情</h2>
+                <button class="modal-close" id="task-detail-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="task-detail-body">
+                <!-- Content will be dynamically generated -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-detail-close">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Task Modal -->
+    <div class="modal" id="new-task-modal">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">新建上传任务</h2>
+                <button class="modal-close" id="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Steps Indicator -->
+                <div class="steps-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">选择文件</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">配置任务</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">秒传检测</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">上传进度</div>
+                    </div>
+                </div>
+
+                <!-- Step Content -->
+                <div class="step-content" id="step-content">
+                    <!-- Content will be dynamically generated -->
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button class="btn btn-secondary" id="btn-modal-cancel">取消</button>
+                <button class="btn btn-primary" id="btn-modal-next">下一步</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/api-config.js"></script>
+    <script type="module" src="scripts/console.js"></script>
+</body>
+</html>
