@@ -4,7 +4,7 @@
 用于解决前端跨域问题
 """
 
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, make_response
 from flask_cors import CORS
 import requests
 import json
@@ -40,12 +40,22 @@ def too_large(e):
 @app.route('/')
 def index():
     """返回首页"""
-    return send_from_directory('.', 'index.html')
+    response = make_response(send_from_directory('.', 'index.html'))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    print('[静态文件] 返回首页，已禁用缓存')
+    return response
 
 @app.route('/<path:filename>')
 def serve_static(filename):
     """提供静态文件服务"""
-    return send_from_directory('.', filename)
+    response = make_response(send_from_directory('.', filename))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    print(f'[静态文件] 返回文件: {filename}，已禁用缓存')
+    return response
 
 @app.route('/api/aisr-process', methods=['POST'])
 def proxy_aisr():
