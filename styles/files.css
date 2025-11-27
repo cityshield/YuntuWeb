@@ -938,7 +938,8 @@
   color: hsl(var(--primary));
 }
 
-/* ==================== 滚动条 ==================== */
+/* ==================== 滚动条 - 已禁用，使用浏览器默认样式 ==================== */
+/*
 .drives-section::-webkit-scrollbar,
 .folder-tree::-webkit-scrollbar,
 .file-list::-webkit-scrollbar,
@@ -968,6 +969,7 @@
 .modal-body::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
+*/
 
 /* ==================== 响应式设计 ==================== */
 @media (max-width: 768px) {

@@ -58,17 +58,24 @@ function initTabs() {
             if (targetForm) {
                 targetForm.classList.add('active');
             }
-            
-            // Refresh captcha for the active form
-            refreshCaptcha(targetTab);
+
+            // Refresh captcha for the active form (only if canvas exists)
+            if (document.getElementById(`${targetTab}CaptchaCanvas`)) {
+                refreshCaptcha(targetTab);
+            }
         });
     });
 }
 
 // Captcha functionality
 function initCaptcha() {
-    refreshCaptcha('login');
-    refreshCaptcha('register');
+    // 只初始化存在的验证码
+    if (document.getElementById('loginCaptchaCanvas')) {
+        refreshCaptcha('login');
+    }
+    if (document.getElementById('registerCaptchaCanvas')) {
+        refreshCaptcha('register');
+    }
 }
 
 function generateCaptchaCode() {

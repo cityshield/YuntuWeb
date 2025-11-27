@@ -8,20 +8,65 @@ const API_CONFIG = {
         baseURL: 'http://localhost:8000',
         apiVersion: 'v1'
     },
+    // 测试环境（使用服务器IP，不需要SSL）
+    testing: {
+        baseURL: 'http://你的服务器IP:8000',  // 替换为实际IP，如 http://123.45.67.89:8000
+        apiVersion: 'v1'
+    },
     // 生产环境
     production: {
-        baseURL: 'https://api.yuntucv.com',
+        baseURL: 'http://api.yuntucv.com',
         apiVersion: 'v1'
     }
 };
 
-// 当前环境（可以根据域名自动检测）
-const ENV = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'development'
-    : 'production';
+// 环境切换管理
+const EnvManager = {
+    // 获取当前环境
+    getCurrentEnv() {
+        // 优先使用 localStorage 保存的环境
+        const savedEnv = localStorage.getItem('api_environment');
+        if (savedEnv && API_CONFIG[savedEnv]) {
+            return savedEnv;
+        }
+        // 默认使用生产环境
+        return 'production';
+    },
+
+    // 设置环境
+    setEnvironment(env) {
+        if (!API_CONFIG[env]) {
+            console.error(`Invalid environment: ${env}`);
+            return false;
+        }
+        localStorage.setItem('api_environment', env);
+        console.log(`[ENV] 切换到 ${env} 环境:`, API_CONFIG[env].baseURL);
+
+        // 刷新页面以应用新环境
+        window.location.reload();
+        return true;
+    },
+
+    // 获取环境名称
+    getEnvName(env) {
+        const names = {
+            'development': '本地开发',
+            'testing': '测试环境',
+            'production': '生产环境'
+        };
+        return names[env] || env;
+    }
+};
+
+// 当前环境
+const ENV = EnvManager.getCurrentEnv();
 
 // 获取当前环境配置
 const currentConfig = API_CONFIG[ENV];
+
+// 输出当前环境信息
+console.log(`[API Config] 当前环境: ${ENV} (${EnvManager.getEnvName(ENV)})`);
+console.log(`[API Config] API地址: ${currentConfig.baseURL}`);
 
 // API基础路径
 const BASE_URL = currentConfig.baseURL;
@@ -382,3 +427,12 @@ const apiClient = new ApiClient();
 window.API_CONFIG = API_CONFIG;
 window.API_ENDPOINTS = API_ENDPOINTS;
 window.apiClient = apiClient;
+window.EnvManager = EnvManager;
+window.CURRENT_ENV = ENV;
+
+// 确认导出成功
+console.log('[API Config] Exports completed:', {
+    EnvManager: !!window.EnvManager,
+    CURRENT_ENV: window.CURRENT_ENV,
+    apiClient: !!window.apiClient
+});

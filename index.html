@@ -7,7 +7,7 @@
     <meta name="description" content="专业的AI图像超分辨率服务，为影视动漫行业提供高速GPU渲染云服务">
     
     <!-- Favicon -->
-    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+    <link rel="icon" href="images/yuntu-logo.svg" type="image/svg+xml">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles/main.css?v=1.0.4">
+    <link rel="stylesheet" href="styles/main.css?v=1.0.6">
     
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
@@ -466,33 +466,10 @@
                     </div>
                 </div>
                 
-                <div class="contact-form" data-aos="fade-left" data-aos-delay="400">
-                    <form class="form">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="您的姓名" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="您的邮箱" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="tel" id="phone" name="phone" placeholder="联系电话">
-                        </div>
-                        <div class="form-group">
-                            <select id="service" name="service" required>
-                                <option value="">选择服务类型</option>
-                                <option value="gpu-render">GPU渲染云</option>
-                                <option value="image-enhance">AI图像增强</option>
-                                <option value="video-enhance">AI视频增强</option>
-                                <option value="3d-modeling">AI 3D建模</option>
-                                <option value="motion-capture">AI动作捕捉</option>
-                                <option value="effects">AI特效生成</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" placeholder="请描述您的需求" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-full">发送消息</button>
-                    </form>
+                <div class="wechat-qr-section" data-aos="fade-left" data-aos-delay="400">
+                    <div class="qr-card-simple">
+                        <img src="images/contact-me.JPG" alt="微信联系方式" class="wechat-contact-card">
+                    </div>
                 </div>
             </div>
         </div>
@@ -501,11 +478,48 @@
     <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
 
+    <!-- Environment Switcher (Dev Tool) -->
+    <div class="env-switcher" id="env-switcher">
+        <button class="env-switcher-trigger" id="env-switcher-trigger" title="切换API环境">
+            <svg class="env-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v6m0 6v6m5.656-15.656l-4.242 4.242m0 6.828l-4.242 4.242M23 12h-6m-6 0H1m17.657-5.656l-4.243 4.242m0 6.828l4.243 4.242"/>
+            </svg>
+            <span class="env-label" id="env-label">生产</span>
+        </button>
+        <div class="env-dropdown" id="env-dropdown">
+            <div class="env-dropdown-header">API环境</div>
+            <button class="env-option" data-env="production">
+                <span class="env-option-icon">🌐</span>
+                <div class="env-option-content">
+                    <span class="env-option-name">生产环境</span>
+                    <span class="env-option-url">api.yuntucv.com</span>
+                </div>
+            </button>
+            <button class="env-option" data-env="testing">
+                <span class="env-option-icon">🔧</span>
+                <div class="env-option-content">
+                    <span class="env-option-name">测试环境</span>
+                    <span class="env-option-url">服务器IP:8000</span>
+                </div>
+            </button>
+            <button class="env-option" data-env="development">
+                <span class="env-option-icon">💻</span>
+                <div class="env-option-content">
+                    <span class="env-option-name">本地开发</span>
+                    <span class="env-option-url">localhost:8000</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script src="scripts/api-config.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
     <script src="scripts/theme-toggle.js"></script>
     <script src="scripts/components.js"></script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/env-switcher.js"></script>
 </body>
 </html>

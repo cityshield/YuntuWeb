@@ -1042,6 +1042,17 @@ section {
     height: 28px;
 }
 
+/* 暗色模式下的图标调整 */
+.dark .contact-icon {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+.dark .contact-icon img {
+    filter: brightness(1.2) saturate(1.1);
+}
+
 .contact-text h4 {
     color: var(--text-primary);
     margin-bottom: 0.5rem;
@@ -1111,6 +1122,151 @@ section {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+/* WeChat QR Code Card */
+.wechat-qr-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.qr-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 2.5rem 2rem;
+    box-shadow: none;
+    transition: all var(--transition-normal);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.qr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
+    border-color: rgba(37,99,235,.3);
+}
+
+.qr-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.qr-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid rgba(37, 99, 235, 0.2);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+.qr-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.qr-user-info {
+    text-align: left;
+}
+
+.qr-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.qr-location {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.qr-code-wrapper {
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-code-image {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform var(--transition-normal);
+}
+
+.qr-code-image:hover {
+    transform: scale(1.02);
+}
+
+.qr-footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.qr-tip {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* 暗色模式下的二维码卡片 */
+.dark .qr-card {
+    border-color: #1f2937;
+}
+
+.dark .qr-card:hover {
+    border-color: rgba(37,99,235,.4);
+}
+
+.dark .qr-avatar {
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+/* WeChat Contact Card - 简化版（完整图片） */
+.qr-card-simple {
+    background: transparent;
+    max-width: 269px;
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.wechat-contact-card {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all var(--transition-normal);
+}
+
+.wechat-contact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 暗色模式下的微信联系卡片 */
+.dark .wechat-contact-card {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark .wechat-contact-card:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* Footer */
@@ -1299,7 +1455,39 @@ section {
     .form {
         padding: 2rem;
     }
-    
+
+    .qr-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .qr-header {
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .qr-avatar {
+        width: 56px;
+        height: 56px;
+    }
+
+    .qr-name {
+        font-size: 1.25rem;
+    }
+
+    .qr-code-image {
+        max-width: 240px;
+    }
+
+    /* 简化版微信卡片移动端适配 */
+    .qr-card-simple {
+        max-width: 100%;
+    }
+
+    .wechat-contact-card {
+        border-radius: 10px;
+    }
+
     .products-grid {
         grid-template-columns: 1fr;
     }
@@ -1377,7 +1565,8 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - 已禁用，使用浏览器默认样式 */
+/*
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -1394,6 +1583,7 @@ html {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
 }
+*/
 
 /* User Menu Styles */
 .nav-actions {
@@ -1588,5 +1778,183 @@ html {
     .user-dropdown {
         right: -10px;
         min-width: 240px;
+    }
+}
+
+/* ======================
+   Environment Switcher
+   ====================== */
+.env-switcher {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    left: auto !important;
+    z-index: 9998 !important;
+}
+
+.env-switcher-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.env-switcher-trigger:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.env-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.env-label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Environment Dropdown */
+.env-dropdown {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    min-width: 280px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all var(--transition-fast);
+}
+
+.env-switcher:hover .env-dropdown,
+.env-switcher-trigger:focus + .env-dropdown,
+.env-dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.env-dropdown-header {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.env-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+
+.env-option:first-of-type {
+    border-radius: 0;
+}
+
+.env-option:last-of-type {
+    border-radius: 0 0 12px 12px;
+}
+
+.env-option:hover {
+    background: var(--bg-secondary);
+}
+
+.env-option.active {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.env-option.active::after {
+    content: '✓';
+    margin-left: auto;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.env-option-icon {
+    font-size: 20px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.env-option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.env-option-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.env-option-url {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Dark Mode */
+.dark .env-switcher-trigger {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #1f2937;
+}
+
+.dark .env-switcher-trigger:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.dark .env-dropdown {
+    background: var(--bg-secondary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .env-switcher {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .env-switcher-trigger {
+        padding: 8px 12px;
+    }
+
+    .env-dropdown {
+        min-width: 240px;
+        right: -10px;
     }
 }
