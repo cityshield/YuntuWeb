@@ -355,12 +355,23 @@
     border-radius: var(--radius);
     margin-top: 1rem;
     font-size: 0.9rem;
+    animation: errorBlink 0.6s ease-in-out; /* 快速闪烁两次，总时长0.6秒 */
 }
 
 .dark .error-message {
     background: #7f1d1d;
     border-color: #991b1b;
     color: #fca5a5;
+}
+
+/* 错误提示闪烁动画 */
+@keyframes errorBlink {
+    0% { opacity: 1; }
+    15% { opacity: 0.3; }
+    30% { opacity: 1; }
+    45% { opacity: 0.3; }
+    60% { opacity: 1; }
+    100% { opacity: 1; }
 }
 
 /* Success States */

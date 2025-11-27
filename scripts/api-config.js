@@ -1,6 +1,93 @@
 // API Configuration for YuntuCV
 // 后端API配置文件
 
+// 字段名中文映射表
+const fieldNameMap = {
+    'body.phone': '手机号',
+    'body.password': '密码',
+    'body.verification_code': '验证码',
+    'body.username': '用户名',
+    'body.sms_code': '短信验证码',
+    'body.captcha': '图形验证码',
+    'body.email': '邮箱',
+    'unknown': '未知字段'
+};
+
+// 错误消息中文映射表
+const errorMessageMap = {
+    // 字段验证
+    'Field required': '此项必填',
+    'field required': '此项必填',
+
+    // 手机号
+    'Invalid phone number': '手机号格式不正确',
+    'invalid phone': '手机号格式不正确',
+
+    // 密码
+    'String should have at least 6 characters': '至少需要6个字符',
+    'password too short': '密码太短',
+    'Incorrect username or password': '用户名或密码错误',
+    'Incorrect password': '密码错误',
+    'incorrect': '用户名或密码错误',
+
+    // 用户
+    'User already exists': '用户已存在',
+    'user exists': '该手机号已被注册',
+
+    // 验证码
+    'Verification code is incorrect': '验证码错误',
+    'Verification code has expired': '验证码已过期',
+    'verification code': '验证码错误',
+    'Invalid verification code': '验证码错误',
+
+    // 网络
+    'Failed to fetch': '网络连接失败',
+    'Network error': '网络错误',
+    'Network request failed': '网络请求失败'
+};
+
+// 翻译错误消息为中文
+function translateErrorMessage(message) {
+    if (!message) return message;
+
+    // 尝试完全匹配
+    if (errorMessageMap[message]) {
+        return errorMessageMap[message];
+    }
+
+    // 尝试部分匹配（不区分大小写）
+    const lowerMessage = message.toLowerCase();
+    for (const [key, value] of Object.entries(errorMessageMap)) {
+        if (lowerMessage.includes(key.toLowerCase())) {
+            return value;
+        }
+    }
+
+    return message;
+}
+
+// 翻译字段名为中文
+function translateFieldName(fieldPath) {
+    if (!fieldPath) return '未知字段';
+
+    // 尝试完全匹配
+    if (fieldNameMap[fieldPath]) {
+        return fieldNameMap[fieldPath];
+    }
+
+    // 尝试匹配字段路径的最后一部分
+    const parts = fieldPath.split('.');
+    const lastPart = parts[parts.length - 1];
+
+    for (const [key, value] of Object.entries(fieldNameMap)) {
+        if (key.endsWith(lastPart)) {
+            return value;
+        }
+    }
+
+    return fieldPath;
+}
+
 // API基础URL配置
 const API_CONFIG = {
     // 开发环境
@@ -248,18 +335,23 @@ class ApiClient {
 
                 if (data.detail) {
                     if (typeof data.detail === 'string') {
-                        errorMessage = data.detail;
+                        // 翻译字符串类型的错误消息
+                        errorMessage = translateErrorMessage(data.detail);
                     } else if (Array.isArray(data.detail)) {
-                        // FastAPI validation errors format
+                        // FastAPI validation errors format - 翻译验证错误
                         errorMessage = data.detail.map(err => {
-                            const field = err.loc ? err.loc.join('.') : 'unknown';
-                            return `${field}: ${err.msg}`;
-                        }).join('; ');
+                            const fieldPath = err.loc ? err.loc.join('.') : 'unknown';
+                            const fieldName = translateFieldName(fieldPath);
+                            const message = translateErrorMessage(err.msg);
+                            return `${fieldName}: ${message}`;
+                        }).join('；');  // 使用中文分号
                     } else if (typeof data.detail === 'object') {
                         errorMessage = JSON.stringify(data.detail);
                     }
                 } else if (data.message) {
-                    errorMessage = typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
+                    // 翻译 message 字段的错误
+                    const msg = typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
+                    errorMessage = translateErrorMessage(msg);
                 }
 
                 const error = new Error(errorMessage);

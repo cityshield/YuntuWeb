@@ -85,18 +85,18 @@
                             <p>登录您的盛世云图账户</p>
                         </div>
                     
-                    <form class="form" id="loginForm">
+                    <form class="form" id="loginForm" method="post" action="javascript:void(0);" autocomplete="on">
                         <div class="form-content">
                             <div class="form-group">
                                 <label for="loginPhone">手机号</label>
-                                <input type="tel" id="loginPhone" name="phone" placeholder="请输入手机号" required>
+                                <input type="tel" id="loginPhone" name="phone" placeholder="请输入手机号" maxlength="11" required>
                                 <div class="error-message" id="loginPhoneError"></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="loginPassword">密码</label>
                                 <div class="password-input">
-                                    <input type="password" id="loginPassword" name="password" placeholder="请输入密码" required>
+                                    <input type="password" id="loginPassword" name="password" placeholder="请输入密码" autocomplete="current-password" maxlength="128" required>
                                     <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
                                         <span class="eye-icon">👁️</span>
                                     </button>
@@ -107,7 +107,7 @@
                             <div class="form-group">
                                 <label for="loginCaptcha">图形验证码</label>
                                 <div class="captcha-container">
-                                    <input type="text" id="loginCaptcha" name="captcha" placeholder="请输入验证码" required>
+                                    <input type="text" id="loginCaptcha" name="captcha" placeholder="请输入验证码" maxlength="6" required>
                                     <div class="captcha-image" id="loginCaptchaImage" onclick="refreshCaptcha('login')">
                                         <canvas id="loginCaptchaCanvas" width="80" height="30"></canvas>
                                         <div class="captcha-refresh">🔄</div>
@@ -153,18 +153,18 @@
                             <p>加入盛世云图，开启AI技术之旅</p>
                         </div>
                     
-                    <form class="form" id="registerForm">
+                    <form class="form" id="registerForm" method="post" action="javascript:void(0);" autocomplete="off">
                         <div class="form-content">
                             <div class="form-group">
                                 <label for="registerPhone">手机号</label>
-                                <input type="tel" id="registerPhone" name="phone" placeholder="请输入手机号" required>
+                                <input type="tel" id="registerPhone" name="phone" placeholder="请输入手机号" maxlength="11" required>
                                 <div class="error-message" id="registerPhoneError"></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="smsCode">短信验证码</label>
                                 <div class="sms-container">
-                                    <input type="text" id="smsCode" name="smsCode" placeholder="请输入短信验证码" required>
+                                    <input type="text" id="smsCode" name="smsCode" placeholder="请输入短信验证码" maxlength="6" required>
                                     <button type="button" class="sms-btn" id="smsBtn" onclick="sendSmsCode()">
                                         <span class="sms-text">获取验证码</span>
                                         <span class="sms-countdown" style="display: none;">60s</span>
@@ -176,7 +176,7 @@
                             <div class="form-group">
                                 <label for="registerPassword">密码</label>
                                 <div class="password-input">
-                                    <input type="password" id="registerPassword" name="password" placeholder="请设置密码" required>
+                                    <input type="password" id="registerPassword" name="password" placeholder="请设置密码" autocomplete="new-password" maxlength="128" required>
                                     <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">
                                         <span class="eye-icon">👁️</span>
                                     </button>
@@ -193,7 +193,7 @@
                             <div class="form-group">
                                 <label for="confirmPassword">确认密码</label>
                                 <div class="password-input">
-                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" required>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" autocomplete="new-password" maxlength="128" required>
                                     <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
                                         <span class="eye-icon">👁️</span>
                                     </button>
@@ -251,17 +251,17 @@
                 <!-- 绑定手机号界面 -->
                 <div class="wechat-bind-phone-container" id="wechatBindPhoneContainer" style="display: none;">
                     <p class="bind-tip">首次使用微信登录，需要绑定手机号</p>
-                    <form id="wechatBindPhoneForm">
+                    <form id="wechatBindPhoneForm" method="post" action="javascript:void(0);">
                         <div class="form-group">
                             <label for="bindPhone">手机号</label>
-                            <input type="tel" id="bindPhone" name="phone" placeholder="请输入手机号" required>
+                            <input type="tel" id="bindPhone" name="phone" placeholder="请输入手机号" maxlength="11" required>
                             <div class="error-message" id="bindPhoneError"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="bindSmsCode">短信验证码</label>
                             <div class="sms-container">
-                                <input type="text" id="bindSmsCode" name="smsCode" placeholder="请输入短信验证码" required>
+                                <input type="text" id="bindSmsCode" name="smsCode" placeholder="请输入短信验证码" maxlength="6" required>
                                 <button type="button" class="sms-btn" id="bindSmsBtn">
                                     <span class="sms-text">获取验证码</span>
                                     <span class="sms-countdown" style="display: none;">60s</span>
@@ -285,17 +285,17 @@
                 <!-- 关联已有账号界面 -->
                 <div class="wechat-link-account-container" id="wechatLinkAccountContainer" style="display: none;">
                     <p class="bind-tip">关联已有账号</p>
-                    <form id="wechatLinkAccountForm">
+                    <form id="wechatLinkAccountForm" method="post" action="javascript:void(0);">
                         <div class="form-group">
                             <label for="linkPhone">手机号</label>
-                            <input type="tel" id="linkPhone" name="phone" placeholder="请输入手机号" required>
+                            <input type="tel" id="linkPhone" name="phone" placeholder="请输入手机号" maxlength="11" required>
                             <div class="error-message" id="linkPhoneError"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="linkPassword">密码</label>
                             <div class="password-input">
-                                <input type="password" id="linkPassword" name="password" placeholder="请输入密码" required>
+                                <input type="password" id="linkPassword" name="password" placeholder="请输入密码" autocomplete="current-password" maxlength="128" required>
                                 <button type="button" class="password-toggle" onclick="togglePassword('linkPassword')">
                                     <span class="eye-icon">👁️</span>
                                 </button>

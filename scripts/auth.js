@@ -423,7 +423,7 @@ async function handleLogin(e) {
     try {
         // 调用后端登录API
         const response = await apiClient.login({
-            username: phone,  // 使用手机号作为用户名
+            phone: phone,  // 使用手机号登录
             password: password
         });
 
@@ -443,9 +443,9 @@ async function handleLogin(e) {
         hideLoading(submitBtn);
         console.error('登录失败:', error);
 
-        // 判断错误类型
-        const isServerError = error.isServerError || error.message.includes('Failed to fetch') || error.message.includes('Network');
-        const isAuthError = error.status === 401 || error.status === 403 || error.message.includes('Incorrect');
+        // 判断错误类型（移除英文关键词依赖）
+        const isServerError = error.isServerError || error.status >= 500;
+        const isAuthError = error.status === 401 || error.status === 403;
 
         if (isServerError) {
             // 服务端错误或网络错误，使用toast提示
@@ -524,8 +524,8 @@ async function handleRegister(e) {
         hideLoading(submitBtn);
         console.error('注册失败:', error);
 
-        // 判断错误类型
-        const isServerError = error.isServerError || error.message.includes('Failed to fetch') || error.message.includes('Network');
+        // 判断错误类型（移除英文关键词依赖）
+        const isServerError = error.isServerError || error.status >= 500;
 
         if (isServerError) {
             // 服务端错误或网络错误，使用toast提示
