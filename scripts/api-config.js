@@ -528,3 +528,38 @@ console.log('[API Config] Exports completed:', {
     CURRENT_ENV: window.CURRENT_ENV,
     apiClient: !!window.apiClient
 });
+
+// ==================== Windows客户端下载配置 ====================
+// Windows客户端下载配置（Base64编码以防止爬虫直接抓取）
+window.DOWNLOAD_CONFIG = {
+    // Base64编码的OSS URL: https://oss-ssyt.oss-cn-hangzhou.aliyuncs.com/WindowsClient/yuntu-lastest.exe
+    encodedUrl: 'aHR0cHM6Ly9vc3Mtc3N5dC5vc3MtY24taGFuZ3pob3UuYWxpeXVuY3MuY29tL1dpbmRvd3NDbGllbnQveXVudHUtbGFzdGVzdC5leGU=',
+    displayFileName: '盛世云图客户端.exe'
+};
+
+// 初始化Windows客户端下载链接
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[Download] 初始化Windows客户端下载链接...');
+
+    const downloadBtn = document.getElementById('download-windows-client');
+    if (downloadBtn) {
+        try {
+            // 解码Base64获取真实下载URL
+            const downloadUrl = atob(window.DOWNLOAD_CONFIG.encodedUrl);
+
+            // 设置下载链接和文件名
+            downloadBtn.href = downloadUrl;
+            downloadBtn.download = window.DOWNLOAD_CONFIG.displayFileName;
+
+            console.log('[Download] Windows客户端下载已就绪');
+            console.log('[Download] 下载文件名:', window.DOWNLOAD_CONFIG.displayFileName);
+        } catch (error) {
+            console.error('[Download] 初始化下载链接失败:', error);
+            downloadBtn.href = '#';
+            downloadBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('下载链接配置错误，请联系客服');
+            });
+        }
+    }
+});
