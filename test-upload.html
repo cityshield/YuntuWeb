@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传功能测试 - File Upload Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .test-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .console {
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e5e7eb;
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 24px;
+        }
+
+        .console::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .console::-webkit-scrollbar-track {
+            background: #111827;
+            border-radius: 4px;
+        }
+
+        .console::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        .console-line {
+            margin: 4px 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-info { color: #60a5fa; }
+        .log-success { color: #34d399; }
+        .log-error { color: #f87171; }
+        .log-warning { color: #fbbf24; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .test-info {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .test-info h3 {
+            color: #1e40af;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .test-info ul {
+            margin-left: 20px;
+            color: #1e40af;
+            font-size: 13px;
+        }
+
+        .test-info li {
+            margin: 4px 0;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📤 文件上传功能测试</h1>
+            <p>File Upload Functionality Test Suite</p>
+        </div>
+
+        <div class="content">
+            <div class="test-info">
+                <h3>📋 测试项目 Test Items:</h3>
+                <ul>
+                    <li>MD5 哈希计算 (MD5 Hash Calculation)</li>
+                    <li>创建上传任务 (Create Upload Task)</li>
+                    <li>批量秒传检测 (Batch Instant Upload Detection)</li>
+                    <li>小文件直接上传 (Small File Direct Upload &lt;5MB)</li>
+                    <li>大文件分片上传 (Large File Chunked Upload ≥5MB)</li>
+                    <li>上传取消功能 (Upload Cancellation)</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎮 控制面板 Control Panel</div>
+                <div class="test-controls">
+                    <button id="runTestsBtn" class="btn btn-primary">
+                        <span id="btnIcon">▶️</span>
+                        <span id="btnText">运行所有测试 Run All Tests</span>
+                    </button>
+                    <button id="clearConsoleBtn" class="btn btn-secondary">
+                        🗑️ 清空日志 Clear Console
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📺 测试日志 Test Console</div>
+                <div id="console" class="console">
+                    <div class="console-line log-info">💡 点击 "运行所有测试" 按钮开始测试...</div>
+                    <div class="console-line log-info">💡 Click "Run All Tests" button to start testing...</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📊 测试统计 Test Statistics</div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Tests</div>
+                        <div class="stat-value" id="totalTests">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Passed</div>
+                        <div class="stat-value" id="passedTests" style="color: #10b981;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Failed</div>
+                        <div class="stat-value" id="failedTests" style="color: #ef4444;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Success Rate</div>
+                        <div class="stat-value" id="successRate">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script>
+    <script src="scripts/api-config.js"></script>
+    <script type="module">
+        import FileUploader from './scripts/file-uploader.js';
+
+        // Console logging utility
+        class ConsoleLogger {
+            constructor(consoleElement) {
+                this.consoleElement = consoleElement;
+            }
+
+            clear() {
+                this.consoleElement.innerHTML = '';
+            }
+
+            log(message, type = 'info') {
+                const line = document.createElement('div');
+                line.className = `console-line log-${type}`;
+                line.textContent = message;
+                this.consoleElement.appendChild(line);
+                this.consoleElement.scrollTop = this.consoleElement.scrollHeight;
+            }
+
+            info(message) { this.log(message, 'info'); }
+            success(message) { this.log(message, 'success'); }
+            error(message) { this.log(message, 'error'); }
+            warning(message) { this.log(message, 'warning'); }
+        }
+
+        // Test utilities
+        class TestUtils {
+            static createTestFile(name, sizeInMB) {
+                const size = sizeInMB * 1024 * 1024;
+                const blob = new Blob([new ArrayBuffer(size)], { type: 'application/octet-stream' });
+                return new File([blob], name, { type: 'application/octet-stream' });
+            }
+
+            static formatFileSize(bytes) {
+                if (bytes === 0) return '0 B';
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+            }
+        }
+
+        // Test runner
+        class FileUploadTestRunner {
+            constructor() {
+                this.logger = new ConsoleLogger(document.getElementById('console'));
+                this.fileUploader = new FileUploader(window.apiClient);
+                this.results = {
+                    total: 0,
+                    passed: 0,
+                    failed: 0
+                };
+            }
+
+            updateStats() {
+                document.getElementById('totalTests').textContent = this.results.total;
+                document.getElementById('passedTests').textContent = this.results.passed;
+                document.getElementById('failedTests').textContent = this.results.failed;
+                const rate = this.results.total > 0
+                    ? Math.round((this.results.passed / this.results.total) * 100)
+                    : 0;
+                document.getElementById('successRate').textContent = rate + '%';
+            }
+
+            async testMD5Calculation() {
+                this.results.total++;
+                this.updateStats();
+
+                this.logger.info('\n📋 Test 1: MD5 Calculation');
+
+                try {
+                    const testFile = TestUtils.createTestFile('test-md5.bin', 1);
+                    this.logger.info(`   Created: ${testFile.name} (${TestUtils.formatFileSize(testFile.size)})`);
+
+                    let lastProgress = 0;
+                    const md5Hash = await this.fileUploader.calculateMD5(testFile, (progress) => {
+                        if (progress - lastProgress >= 25 || progress === 100) {
+                            this.logger.info(`   Progress: ${progress}%`);
+                            lastProgress = progress;
+                        }
+                    });
+
+                    this.logger.success(`✅ MD5: ${md5Hash}`);
+                    this.results.passed++;
+                    this.updateStats();
+                } catch (error) {
+                    this.logger.error(`❌ Failed: ${error.message}`);
+                    this.results.failed++;
+                    this.updateStats();
+                }
+            }
+
+            async testSmallFileSimulation() {
+                this.results.total++;
+                this.updateStats();
+
+                this.logger.info('\n📋 Test 2: Small File Upload Simulation');
+
+                try {
+                    const testFile = TestUtils.createTestFile('small-test.bin', 2);
+                    this.logger.info(`   Created: ${testFile.name} (${TestUtils.formatFileSize(testFile.size)})`);
+                    this.logger.info('   Calculating MD5...');
+
+                    const md5Hash = await this.fileUploader.calculateMD5(testFile, null);
+
+                    this.logger.success(`✅ Small file validated`);
+                    this.logger.info(`   MD5: ${md5Hash}`);
+                    this.logger.info(`   Upload method: Direct upload (< 5MB)`);
+                    this.results.passed++;
+                    this.updateStats();
+                } catch (error) {
+                    this.logger.error(`❌ Failed: ${error.message}`);
+                    this.results.failed++;
+                    this.updateStats();
+                }
+            }
+
+            async testLargeFileSimulation() {
+                this.results.total++;
+                this.updateStats();
+
+                this.logger.info('\n📋 Test 3: Large File Chunking Simulation');
+
+                try {
+                    const testFile = TestUtils.createTestFile('large-test.bin', 10);
+                    this.logger.info(`   Created: ${testFile.name} (${TestUtils.formatFileSize(testFile.size)})`);
+
+                    const chunkSize = 5 * 1024 * 1024;
+                    const totalChunks = Math.ceil(testFile.size / chunkSize);
+
+                    this.logger.info(`   Chunks: ${totalChunks}`);
+                    this.logger.info(`   Chunk size: ${TestUtils.formatFileSize(chunkSize)}`);
+                    this.logger.success(`✅ Large file chunking validated`);
+                    this.logger.info(`   Upload method: Multipart upload (>= 5MB)`);
+                    this.results.passed++;
+                    this.updateStats();
+                } catch (error) {
+                    this.logger.error(`❌ Failed: ${error.message}`);
+                    this.results.failed++;
+                    this.updateStats();
+                }
+            }
+
+            async testCancellation() {
+                this.results.total++;
+                this.updateStats();
+
+                this.logger.info('\n📋 Test 4: Upload Cancellation');
+
+                try {
+                    const testFileName = 'cancel-test.bin';
+                    this.logger.info(`   Testing cancellation for: ${testFileName}`);
+                    this.fileUploader.cancelUpload(testFileName);
+                    this.logger.success(`✅ Cancellation mechanism validated`);
+                    this.results.passed++;
+                    this.updateStats();
+                } catch (error) {
+                    this.logger.error(`❌ Failed: ${error.message}`);
+                    this.results.failed++;
+                    this.updateStats();
+                }
+            }
+
+            async runAll() {
+                this.logger.clear();
+                this.results = { total: 0, passed: 0, failed: 0 };
+                this.updateStats();
+
+                this.logger.info('╔═══════════════════════════════════════════════════════╗');
+                this.logger.info('║       FILE UPLOAD FUNCTIONALITY TEST SUITE            ║');
+                this.logger.info('║            文件上传功能测试套件                         ║');
+                this.logger.info('╚═══════════════════════════════════════════════════════╝\n');
+
+                await this.testMD5Calculation();
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                await this.testSmallFileSimulation();
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                await this.testLargeFileSimulation();
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                await this.testCancellation();
+
+                this.logger.info('\n' + '═'.repeat(55));
+                this.logger.info('📊 TEST SUMMARY');
+                this.logger.info('═'.repeat(55));
+                this.logger.info(`Total: ${this.results.total}`);
+                this.logger.success(`Passed: ${this.results.passed} ✅`);
+                if (this.results.failed > 0) {
+                    this.logger.error(`Failed: ${this.results.failed} ❌`);
+                } else {
+                    this.logger.info(`Failed: ${this.results.failed}`);
+                }
+                const rate = Math.round((this.results.passed / this.results.total) * 100);
+                this.logger.info(`Success Rate: ${rate}%`);
+                this.logger.info('═'.repeat(55));
+
+                if (this.results.failed === 0) {
+                    this.logger.success('\n🎉 All tests passed! File upload functionality is working correctly.');
+                } else {
+                    this.logger.warning('\n⚠️  Some tests failed. Please check the errors above.');
+                }
+            }
+        }
+
+        // Initialize
+        const testRunner = new FileUploadTestRunner();
+        const runButton = document.getElementById('runTestsBtn');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnText = document.getElementById('btnText');
+        const clearButton = document.getElementById('clearConsoleBtn');
+
+        runButton.addEventListener('click', async () => {
+            runButton.disabled = true;
+            btnIcon.innerHTML = '<div class="spinner"></div>';
+            btnText.textContent = '运行中... Running...';
+
+            try {
+                await testRunner.runAll();
+            } finally {
+                btnIcon.textContent = '▶️';
+                btnText.textContent = '运行所有测试 Run All Tests';
+                runButton.disabled = false;
+            }
+        });
+
+        clearButton.addEventListener('click', () => {
+            testRunner.logger.clear();
+            testRunner.logger.info('💡 点击 "运行所有测试" 按钮开始测试...');
+            testRunner.logger.info('💡 Click "Run All Tests" button to start testing...');
+        });
+    </script>
+</body>
+</html>

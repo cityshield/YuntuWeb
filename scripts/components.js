@@ -278,28 +278,11 @@ class ComponentLoader {
         window.location.href = 'auth.html';
     }
 
-    // 主题切换（暗/亮），持久化到 localStorage
+    // 主题切换初始化
+    // 主题切换功能已由 theme-toggle.js 统一处理
     initThemeToggle() {
-        const rootEl = document.documentElement;
-        const saved = localStorage.getItem('theme') || 'light';
-        if (saved === 'dark') rootEl.classList.add('dark');
-
-        const btn = document.getElementById('theme-toggle');
-        const icon = btn ? btn.querySelector('.theme-icon') : null;
-
-        const applyIcon = () => {
-            if (!icon) return;
-            icon.textContent = rootEl.classList.contains('dark') ? '☀️' : '🌙';
-        };
-        applyIcon();
-
-        if (btn) {
-            btn.addEventListener('click', () => {
-                const isDark = rootEl.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                applyIcon();
-            });
-        }
+        // theme-toggle.js 会自动监听 componentsLoaded 事件并初始化主题切换按钮
+        // 这里不需要额外的操作
     }
 
     // 加载所有组件

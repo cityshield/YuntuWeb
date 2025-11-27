@@ -498,8 +498,7 @@ async function handleRegister(e) {
             username: phone,  // 使用手机号作为用户名
             phone: phone,
             verification_code: smsCode,
-            password: password,
-            email: null  // 可选字段
+            password: password
         });
 
         hideLoading(submitBtn);

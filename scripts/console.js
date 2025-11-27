@@ -131,27 +131,42 @@ async function loadUserInfo() {
 
         ConsoleState.currentUser = userInfo;
 
-        // Update sidebar
-        const sidebarUserName = document.getElementById('sidebar-user-name');
-        const sidebarUserPhone = document.getElementById('sidebar-user-phone');
-        const sidebarUserAvatar = document.getElementById('sidebar-user-avatar');
+        // Update console header user menu
+        const consoleUserName = document.getElementById('console-user-name');
+        const consoleUserDisplayName = document.getElementById('console-user-display-name');
+        const consoleUserPhone = document.getElementById('console-user-phone-display');
+        const consoleUserAvatar = document.getElementById('console-user-avatar');
 
-        if (sidebarUserName) {
-            sidebarUserName.textContent = userInfo.username || '用户';
+        const username = userInfo.username || '用户';
+        const phone = userInfo.phone || '';
+        const maskedPhone = phone ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '153****2988';
+
+        if (consoleUserName) {
+            consoleUserName.textContent = username;
         }
-        if (sidebarUserPhone) {
-            const phone = userInfo.phone || '';
-            sidebarUserPhone.textContent = phone ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '---';
+        if (consoleUserDisplayName) {
+            consoleUserDisplayName.textContent = username;
+        }
+        if (consoleUserPhone) {
+            consoleUserPhone.textContent = maskedPhone;
+        }
+        if (consoleUserAvatar && username) {
+            // Show first character as avatar
+            const firstChar = username.charAt(0).toUpperCase();
+            consoleUserAvatar.innerHTML = `<span class="avatar-placeholder">${firstChar}</span>`;
         }
 
-        // Update header
-        const headerUserAvatar = document.getElementById('header-user-avatar');
-        if (headerUserAvatar && userInfo.username) {
-            const firstChar = userInfo.username.charAt(0).toUpperCase();
-            headerUserAvatar.innerHTML = `<span>${firstChar}</span>`;
+        // Show user menu, hide login button
+        const consoleUserMenu = document.getElementById('console-user-menu');
+        const consoleLoginButton = document.getElementById('console-login-button');
+        if (consoleUserMenu) {
+            consoleUserMenu.style.display = 'block';
+        }
+        if (consoleLoginButton) {
+            consoleLoginButton.style.display = 'none';
         }
 
-        console.log('User info loaded:', userInfo.username);
+        console.log('User info loaded:', username);
     } catch (error) {
         console.error('Failed to load user info:', error);
         showToast('加载用户信息失败', 'error');
@@ -224,6 +239,7 @@ async function switchSection(sectionName) {
     if (breadcrumbCurrent) {
         const sectionNames = {
             'dashboard': '仪表板',
+            'files': '文件管理',
             'tasks': '上传任务'
         };
         breadcrumbCurrent.textContent = sectionNames[sectionName] || sectionName;
@@ -234,6 +250,8 @@ async function switchSection(sectionName) {
 
     if (sectionName === 'dashboard') {
         await loadDashboardData();
+    } else if (sectionName === 'files') {
+        await loadFilesData();
     } else if (sectionName === 'tasks') {
         await loadTasksData();
     }
@@ -248,7 +266,34 @@ async function switchSection(sectionName) {
  * Initialize buttons
  */
 function initializeButtons() {
-    // Logout button
+    // Console user menu dropdown
+    const consoleUserMenuTrigger = document.getElementById('console-user-menu-trigger');
+    const consoleUserDropdown = document.getElementById('console-user-dropdown');
+
+    if (consoleUserMenuTrigger && consoleUserDropdown) {
+        consoleUserMenuTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // 使用 'show' 类来匹配 main.css 中的样式
+            consoleUserDropdown.classList.toggle('show');
+            consoleUserMenuTrigger.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!consoleUserMenuTrigger.contains(e.target) && !consoleUserDropdown.contains(e.target)) {
+                consoleUserDropdown.classList.remove('show');
+                consoleUserMenuTrigger.classList.remove('active');
+            }
+        });
+    }
+
+    // Console logout button
+    const consoleLogoutButton = document.getElementById('console-logout-button');
+    if (consoleLogoutButton) {
+        consoleLogoutButton.addEventListener('click', handleLogout);
+    }
+
+    // Sidebar logout button (kept for backward compatibility)
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', handleLogout);
@@ -264,6 +309,12 @@ function initializeButtons() {
     const scanDrivesBtn = document.getElementById('btn-scan-drives');
     if (scanDrivesBtn) {
         scanDrivesBtn.addEventListener('click', handleScanDrives);
+    }
+
+    // Back button in file browser
+    const btnBack = document.getElementById('btn-back');
+    if (btnBack) {
+        btnBack.addEventListener('click', goBackToDrives);
     }
 
     // Filter button
@@ -383,6 +434,172 @@ async function loadRecentTasks(tasks) {
 
     recentTaskList.innerHTML = recentTasks.map(task => createTaskCard(task)).join('');
 }
+
+/**
+ * Load files section data
+ */
+async function loadFilesData() {
+    try {
+        // Initialize file manager when entering files section
+        if (window.fileManager && typeof window.fileManager.init === 'function') {
+            await window.fileManager.init();
+        } else {
+            // Fallback: manually load drives
+            await loadDrives();
+        }
+    } catch (error) {
+        console.error('Failed to load files data:', error);
+        showToast('加载文件管理数据失败', 'error');
+    }
+}
+
+/**
+ * Load drives for files section
+ */
+async function loadDrives() {
+    try {
+        const drivesGrid = document.getElementById('drives-grid');
+        if (!drivesGrid) return;
+
+        // Show loading
+        drivesGrid.innerHTML = '<div class="loading-placeholder"><div class="spinner"></div><span>加载中...</span></div>';
+
+        // Fetch drives
+        const response = await window.apiClient.get(window.API_ENDPOINTS.drives.list);
+        const drives = response.drives || [];
+
+        if (drives.length === 0) {
+            drivesGrid.innerHTML = '<div class="empty-state">暂无盘符，请先创建一个盘符</div>';
+            return;
+        }
+
+        // Render drives
+        drivesGrid.innerHTML = drives.map(drive => `
+            <div class="drive-card" onclick="selectDrive('${drive.id}', '${escapeHtml(drive.name)}')">
+                <div class="drive-icon">${drive.icon || '💾'}</div>
+                <div class="drive-info">
+                    <div class="drive-name">${escapeHtml(drive.name)}</div>
+                    <div class="drive-stats">
+                        <span>${drive.file_count || 0} 文件</span>
+                        <span>${formatFileSize(drive.total_size || 0)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Failed to load drives:', error);
+        const drivesGrid = document.getElementById('drives-grid');
+        if (drivesGrid) {
+            drivesGrid.innerHTML = '<div class="empty-state">加载失败</div>';
+        }
+        showToast('加载盘符失败', 'error');
+    }
+}
+
+/**
+ * Select a drive and show file browser
+ */
+async function selectDrive(driveId, driveName) {
+    try {
+        // Hide drives grid
+        const drivesSection = document.querySelector('.drives-section-main');
+        if (drivesSection) {
+            drivesSection.style.display = 'none';
+        }
+
+        // Show file browser
+        const fileBrowser = document.getElementById('file-browser-container');
+        if (fileBrowser) {
+            fileBrowser.style.display = 'block';
+        }
+
+        // Update breadcrumb
+        const breadcrumbFile = document.getElementById('breadcrumb-file');
+        if (breadcrumbFile) {
+            breadcrumbFile.innerHTML = `
+                <span class="breadcrumb-item">${escapeHtml(driveName)}</span>
+            `;
+        }
+
+        // Load files for this drive
+        await loadDriveFiles(driveId, '/');
+    } catch (error) {
+        console.error('Failed to select drive:', error);
+        showToast('选择盘符失败', 'error');
+    }
+}
+
+/**
+ * Load files for a drive
+ */
+async function loadDriveFiles(driveId, path) {
+    try {
+        const fileList = document.getElementById('file-list');
+        if (!fileList) return;
+
+        // Show loading
+        fileList.innerHTML = '<div class="loading-placeholder"><div class="spinner"></div><span>加载中...</span></div>';
+
+        // Fetch files
+        const response = await window.apiClient.get(`${window.API_ENDPOINTS.drives.list}/${driveId}/files?path=${encodeURIComponent(path)}`);
+        const files = response.files || [];
+
+        if (files.length === 0) {
+            fileList.innerHTML = '<div class="empty-state">此文件夹为空</div>';
+            return;
+        }
+
+        // Render files (simple list for now)
+        fileList.innerHTML = files.map(file => `
+            <div class="file-item">
+                <div class="file-info">
+                    <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        ${file.is_folder ?
+                            '<path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>' :
+                            '<path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>'
+                        }
+                    </svg>
+                    <span class="file-name">${escapeHtml(file.name)}</span>
+                </div>
+                <div class="file-meta">
+                    ${file.is_folder ?
+                        '<span>-</span>' :
+                        `<span>${formatFileSize(file.size || 0)}</span>`
+                    }
+                    <span>${file.updated_at ? new Date(file.updated_at).toLocaleString('zh-CN') : '-'}</span>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Failed to load drive files:', error);
+        const fileList = document.getElementById('file-list');
+        if (fileList) {
+            fileList.innerHTML = '<div class="empty-state">加载失败</div>';
+        }
+        showToast('加载文件失败', 'error');
+    }
+}
+
+/**
+ * Go back to drives grid
+ */
+function goBackToDrives() {
+    // Show drives grid
+    const drivesSection = document.querySelector('.drives-section-main');
+    if (drivesSection) {
+        drivesSection.style.display = 'block';
+    }
+
+    // Hide file browser
+    const fileBrowser = document.getElementById('file-browser-container');
+    if (fileBrowser) {
+        fileBrowser.style.display = 'none';
+    }
+}
+
+// Make functions globally accessible
+window.selectDrive = selectDrive;
+window.goBackToDrives = goBackToDrives;
 
 /**
  * Load tasks data

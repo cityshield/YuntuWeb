@@ -1,0 +1,491 @@
+/**
+ * shadcn/ui 基础样式文件
+ * 专用于控制台等管理后台页面
+ * 基于 shadcn/ui 设计规范
+ * 文档: https://ui.shadcn.com/
+ */
+
+/* ========================================
+   CSS 变量定义 - 亮色主题
+   ======================================== */
+:root {
+  /* 背景色 */
+  --background: 0 0% 100%;           /* 白色背景 */
+  --foreground: 222.2 84% 4.9%;     /* 深色文字 */
+
+  /* 卡片 */
+  --card: 0 0% 100%;                /* 卡片背景 */
+  --card-foreground: 222.2 84% 4.9%;
+
+  /* 弹出层 */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  /* 主色 */
+  --primary: 222.2 47.4% 11.2%;     /* 深蓝黑 */
+  --primary-foreground: 210 40% 98%;
+
+  /* 次要色 */
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  /* 柔和色 */
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  /* 强调色 */
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  /* 危险色 */
+  --destructive: 0 84.2% 60.2%;     /* 红色 */
+  --destructive-foreground: 210 40% 98%;
+
+  /* 边框 */
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+
+  /* 聚焦环 */
+  --ring: 222.2 84% 4.9%;
+
+  /* 圆角 */
+  --radius: 0.5rem;                  /* 8px */
+}
+
+/* ========================================
+   CSS 变量定义 - 暗色主题
+   ======================================== */
+.dark {
+  /* 背景色 */
+  --background: 222.2 84% 4.9%;     /* 深色背景 */
+  --foreground: 210 40% 98%;        /* 浅色文字 */
+
+  /* 卡片 */
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+
+  /* 弹出层 */
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  /* 主色 */
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  /* 次要色 */
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  /* 柔和色 */
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  /* 强调色 */
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  /* 危险色 */
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  /* 边框 */
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+
+  /* 聚焦环 */
+  --ring: 212.7 26.8% 83.9%;
+}
+
+/* ========================================
+   基础样式重置
+   ======================================== */
+* {
+  border-color: hsl(var(--border));
+}
+
+/* ========================================
+   工具类样式
+   ======================================== */
+
+/* 背景色 */
+.bg-background { background-color: hsl(var(--background)); }
+.bg-foreground { background-color: hsl(var(--foreground)); }
+.bg-card { background-color: hsl(var(--card)); }
+.bg-popover { background-color: hsl(var(--popover)); }
+.bg-primary { background-color: hsl(var(--primary)); }
+.bg-secondary { background-color: hsl(var(--secondary)); }
+.bg-muted { background-color: hsl(var(--muted)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+.bg-destructive { background-color: hsl(var(--destructive)); }
+
+/* 文字颜色 */
+.text-foreground { color: hsl(var(--foreground)); }
+.text-card-foreground { color: hsl(var(--card-foreground)); }
+.text-popover-foreground { color: hsl(var(--popover-foreground)); }
+.text-primary { color: hsl(var(--primary)); }
+.text-primary-foreground { color: hsl(var(--primary-foreground)); }
+.text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.text-accent-foreground { color: hsl(var(--accent-foreground)); }
+.text-destructive { color: hsl(var(--destructive)); }
+.text-destructive-foreground { color: hsl(var(--destructive-foreground)); }
+
+/* 边框 */
+.border { border: 1px solid hsl(var(--border)); }
+.border-input { border-color: hsl(var(--input)); }
+
+/* 圆角 */
+.rounded-sm { border-radius: calc(var(--radius) - 4px); }
+.rounded { border-radius: calc(var(--radius) - 2px); }
+.rounded-md { border-radius: calc(var(--radius)); }
+.rounded-lg { border-radius: calc(var(--radius) + 2px); }
+.rounded-xl { border-radius: calc(var(--radius) + 4px); }
+
+/* 阴影 */
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+.shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+.shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+
+/* 聚焦环 */
+.ring { box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15); }
+.ring-offset-2 { box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring) / 0.15); }
+
+/* ========================================
+   按钮组件样式
+   ======================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 150ms ease;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+/* 按钮尺寸 */
+.btn-sm {
+  height: 2rem;      /* 32px */
+  padding: 0 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.btn-default {
+  height: 2.5rem;    /* 40px */
+  padding: 0 1rem;
+}
+
+.btn-lg {
+  height: 3rem;      /* 48px */
+  padding: 0 2rem;
+  font-size: 0.9375rem;
+}
+
+/* 按钮变体 - Default (主要操作) */
+.btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.btn-primary:focus-visible {
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15);
+}
+
+/* 按钮变体 - Destructive (危险操作) */
+.btn-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.btn-destructive:hover {
+  background-color: hsl(var(--destructive) / 0.9);
+}
+
+/* 按钮变体 - Outline (次要操作) */
+.btn-outline {
+  border-color: hsl(var(--input));
+  background-color: transparent;
+  color: hsl(var(--foreground));
+}
+
+.btn-outline:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* 按钮变体 - Secondary (辅助操作) */
+.btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+/* 按钮变体 - Ghost (轻量操作) */
+.btn-ghost {
+  background-color: transparent;
+  color: hsl(var(--foreground));
+}
+
+.btn-ghost:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* 按钮变体 - Link (文本链接) */
+.btn-link {
+  background-color: transparent;
+  color: hsl(var(--primary));
+  text-underline-offset: 4px;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* 禁用状态 */
+.btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ========================================
+   卡片组件样式
+   ======================================== */
+
+.card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(var(--card-foreground));
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.card-content {
+  padding: 1.5rem;
+  padding-top: 0;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  padding-top: 0;
+}
+
+/* ========================================
+   输入框组件样式
+   ======================================== */
+
+.input {
+  display: flex;
+  height: 2.5rem;    /* 40px */
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  transition: all 150ms ease;
+  outline: none;
+}
+
+.input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+.input:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15);
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Textarea */
+.textarea {
+  display: flex;
+  min-height: 5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  transition: all 150ms ease;
+  outline: none;
+  resize: vertical;
+}
+
+.textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+.textarea:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15);
+}
+
+/* Select */
+.select {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  transition: all 150ms ease;
+  outline: none;
+  cursor: pointer;
+}
+
+.select:focus {
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.15);
+}
+
+/* ========================================
+   标签组件样式
+   ======================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: calc(var(--radius) - 2px);
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: all 150ms ease;
+  border: 1px solid transparent;
+}
+
+.badge-default {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.badge-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.badge-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.badge-outline {
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+/* ========================================
+   表格组件样式
+   ======================================== */
+
+.table-container {
+  width: 100%;
+  overflow: auto;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+}
+
+.table {
+  width: 100%;
+  caption-side: bottom;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+
+.table thead {
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.table thead tr {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.table th {
+  height: 3rem;
+  padding: 0 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+}
+
+.table tbody tr {
+  border-bottom: 1px solid hsl(var(--border));
+  transition: background-color 150ms ease;
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.table td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+/* ========================================
+   主题切换平滑过渡
+   ======================================== */
+
+body {
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.card,
+.input,
+.textarea,
+.select,
+.btn {
+  transition: background-color 150ms ease,
+              color 150ms ease,
+              border-color 150ms ease,
+              box-shadow 150ms ease;
+}

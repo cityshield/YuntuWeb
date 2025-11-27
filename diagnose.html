@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传问题诊断工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            background: #f9fafb;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .status-ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .info-box h3 {
+            color: #1e40af;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #1e40af;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 上传问题诊断工具</h1>
+            <p>Upload Issue Diagnostic Tool</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <h3>📋 使用说明</h3>
+                <p>点击下方按钮逐步诊断问题。如果所有检查都通过，上传功能应该可以正常工作。</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">1. 检查后端服务</div>
+                <button class="btn" onclick="checkBackend()">检查后端健康状态</button>
+                <div id="backend-result"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. 检查Token状态</div>
+                <button class="btn" onclick="checkToken()">检查当前Token</button>
+                <div id="token-result"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">3. 测试用户信息接口</div>
+                <button class="btn" onclick="testUserAPI()">测试 /users/me</button>
+                <div id="user-result"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">4. 测试上传任务创建</div>
+                <button class="btn" onclick="testCreateTask()">测试创建上传任务</button>
+                <div id="task-result"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">5. 清除旧数据并重新开始</div>
+                <button class="btn" onclick="clearAndRestart()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">清除Token并跳转登录</button>
+                <div id="clear-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function checkBackend() {
+            const resultDiv = document.getElementById('backend-result');
+            resultDiv.innerHTML = '<div class="result">正在检查...</div>';
+
+            try {
+                const response = await fetch('http://localhost:8000/health');
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-ok">✓ 成功</span>
+<strong>后端服务正常运行</strong>
+
+状态: ${data.status}
+版本: ${data.version}
+服务: ${data.service}
+域名: ${data.domain}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>后端响应异常</strong>
+
+状态码: ${response.status}
+响应: ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>无法连接到后端服务</strong>
+
+错误: ${error.message}
+
+请确保后端服务正在运行在 http://localhost:8000
+                    </div>
+                `;
+            }
+        }
+
+        function checkToken() {
+            const resultDiv = document.getElementById('token-result');
+            const accessToken = localStorage.getItem('access_token');
+            const refreshToken = localStorage.getItem('refresh_token');
+            const userInfo = localStorage.getItem('user_info');
+
+            if (!accessToken) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-warning">⚠ 警告</span>
+<strong>未找到Access Token</strong>
+
+您需要先登录。请点击下方"清除Token并跳转登录"按钮。
+                    </div>
+                `;
+                return;
+            }
+
+            // 解码JWT payload
+            try {
+                const payload = JSON.parse(atob(accessToken.split('.')[1]));
+                const hasEmail = 'email' in payload;
+                const exp = new Date(payload.exp * 1000);
+                const now = new Date();
+                const isExpired = exp < now;
+
+                let status = 'status-ok';
+                let message = '✓ Token正常';
+
+                if (hasEmail) {
+                    status = 'status-error';
+                    message = '✗ Token包含废弃的email字段';
+                } else if (isExpired) {
+                    status = 'status-warning';
+                    message = '⚠ Token已过期';
+                }
+
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status ${status}">${message}</span>
+
+<strong>Token信息:</strong>
+用户ID: ${payload.sub}
+包含email字段: ${hasEmail ? '是 (❌ 需要清除)' : '否 (✓ 正常)'}
+过期时间: ${exp.toLocaleString('zh-CN')}
+是否过期: ${isExpired ? '是 (需要重新登录)' : '否'}
+Token类型: ${payload.type}
+
+<strong>建议:</strong>
+${hasEmail ? '⚠️  检测到旧Token (包含email字段)，请清除Token并重新登录' : '✓ Token格式正确'}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>Token格式无效</strong>
+
+错误: ${error.message}
+
+请清除Token并重新登录。
+                    </div>
+                `;
+            }
+        }
+
+        async function testUserAPI() {
+            const resultDiv = document.getElementById('user-result');
+            resultDiv.innerHTML = '<div class="result">正在测试...</div>';
+
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>未找到Token</strong>
+
+请先登录。
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/users/me', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-ok">✓ 成功</span>
+<strong>用户信息接口正常</strong>
+
+响应数据:
+${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>用户信息接口失败</strong>
+
+状态码: ${response.status}
+错误: ${JSON.stringify(data, null, 2)}
+
+${response.status === 401 ? '⚠️  Token无效或已过期，请重新登录' : ''}
+${response.status === 500 ? '⚠️  服务器错误，可能是数据库中有旧的用户数据包含email字段' : ''}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>请求失败</strong>
+
+错误: ${error.message}
+
+可能原因:
+1. 后端服务未运行
+2. CORS配置问题
+3. 网络连接问题
+                    </div>
+                `;
+            }
+        }
+
+        async function testCreateTask() {
+            const resultDiv = document.getElementById('task-result');
+            resultDiv.innerHTML = '<div class="result">正在测试...</div>';
+
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>未找到Token</strong>
+
+请先登录。
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // 首先获取或创建drive
+                let driveResponse = await fetch('http://localhost:8000/api/v1/drives', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                let driveData = await driveResponse.json();
+                let driveId;
+
+                if (driveData.drives && driveData.drives.length > 0) {
+                    driveId = driveData.drives[0].id;
+                } else {
+                    // 创建默认drive
+                    const createDriveResponse = await fetch('http://localhost:8000/api/v1/drives', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: '测试盘符',
+                            icon: '💾',
+                            description: '诊断工具创建'
+                        })
+                    });
+                    const newDrive = await createDriveResponse.json();
+                    driveId = newDrive.id;
+                }
+
+                // 创建测试任务
+                const taskData = {
+                    upload_manifest: {
+                        task_name: '诊断测试任务',
+                        drive_id: driveId,
+                        priority: 5,
+                        total_files: 1,
+                        total_size: 1024,
+                        client_info: {
+                            platform: 'Web',
+                            version: '1.0.0',
+                            ip: null
+                        },
+                        files: [{
+                            index: 0,
+                            local_path: 'test.txt',
+                            target_folder_path: '/',
+                            file_name: 'test.txt',
+                            file_size: 1024,
+                            mime_type: 'text/plain'
+                        }]
+                    }
+                };
+
+                const response = await fetch('http://localhost:8000/api/v1/upload-tasks', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(taskData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-ok">✓ 成功</span>
+<strong>上传任务创建成功</strong>
+
+任务ID: ${data.id}
+任务名称: ${data.task_name}
+状态: ${data.status}
+
+✓ 上传功能应该可以正常工作了！
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>创建任务失败</strong>
+
+状态码: ${response.status}
+错误: ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+<span class="status status-error">✗ 错误</span>
+<strong>请求失败</strong>
+
+错误: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearAndRestart() {
+            const resultDiv = document.getElementById('clear-result');
+
+            // 清除所有存储
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user_info');
+            localStorage.removeItem('token_timestamp');
+
+            resultDiv.innerHTML = `
+                <div class="result">
+<span class="status status-ok">✓ 成功</span>
+<strong>Token已清除</strong>
+
+即将跳转到登录页...
+                </div>
+            `;
+
+            setTimeout(() => {
+                window.location.href = '/auth.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

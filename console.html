@@ -16,7 +16,10 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/shadcn-base.css">
     <link rel="stylesheet" href="styles/console.css">
+    <link rel="stylesheet" href="styles/console-dark.css">
+    <link rel="stylesheet" href="styles/files.css">
 </head>
 <body class="console-body">
     <!-- Console Container -->
@@ -29,17 +32,6 @@
                 <span class="logo-text">盛世云图</span>
             </div>
 
-            <!-- User Card -->
-            <div class="user-card">
-                <div class="user-avatar" id="sidebar-user-avatar">
-                    <span class="avatar-placeholder">👤</span>
-                </div>
-                <div class="user-info">
-                    <div class="user-name" id="sidebar-user-name">加载中...</div>
-                    <div class="user-phone" id="sidebar-user-phone">---</div>
-                </div>
-            </div>
-
             <!-- Navigation Menu -->
             <nav class="sidebar-nav">
                 <a href="#dashboard" class="nav-item active" data-section="dashboard">
@@ -50,6 +42,12 @@
                         <rect x="3" y="14" width="7" height="7" rx="1"/>
                     </svg>
                     <span>仪表板</span>
+                </a>
+                <a href="#files" class="nav-item" data-section="files">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                    </svg>
+                    <span>文件管理</span>
                 </a>
                 <a href="#tasks" class="nav-item" data-section="tasks">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -100,10 +98,71 @@
                     <span class="breadcrumb-item active" id="breadcrumb-current">仪表板</span>
                 </nav>
 
+                <!-- 用户菜单和主题切换 -->
                 <div class="header-user">
-                    <div class="user-avatar-small" id="header-user-avatar">
-                        <span>👤</span>
+                    <!-- 已登录状态 -->
+                    <div class="user-menu" id="console-user-menu">
+                        <button class="user-menu-trigger" id="console-user-menu-trigger">
+                            <span class="user-name" id="console-user-name">用户</span>
+                            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+
+                        <!-- 下拉菜单 -->
+                        <div class="user-dropdown" id="console-user-dropdown">
+                            <div class="dropdown-header">
+                                <div class="user-avatar" id="console-user-avatar">
+                                    <span class="avatar-placeholder">👤</span>
+                                </div>
+                                <div class="user-info">
+                                    <p class="user-display-name" id="console-user-display-name">用户</p>
+                                    <p class="user-phone" id="console-user-phone-display">153****2988</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a href="index.html" class="dropdown-link">
+                                        <span class="dropdown-icon">🏠</span>
+                                        <span>回到首页</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="console.html" class="dropdown-link">
+                                        <span class="dropdown-icon">📊</span>
+                                        <span>控制台</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="account-settings.html" class="dropdown-link">
+                                        <span class="dropdown-icon">⚙️</span>
+                                        <span>账户设置</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="#" class="dropdown-link">
+                                        <span class="dropdown-icon">💳</span>
+                                        <span>财务管理</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-logout" id="console-logout-button">
+                                <span class="dropdown-icon">🚪</span>
+                                <span>退出登录</span>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- 主题切换按钮 -->
+                    <button id="console-theme-toggle" class="theme-toggle" aria-label="切换主题" title="切换主题">
+                        <svg class="theme-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 3v18" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 3a9 9 0 0 1 0 18" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </button>
                 </div>
             </header>
 
@@ -191,6 +250,106 @@
                                 <div class="spinner"></div>
                                 <span>加载中...</span>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Files Section -->
+                <section id="section-files" class="content-section">
+                    <h1 class="section-title">文件管理</h1>
+
+                    <!-- Drives Grid -->
+                    <div class="drives-section-main">
+                        <div class="drives-header-main">
+                            <h2 class="subsection-title">我的盘符</h2>
+                            <button class="action-btn action-btn-primary action-btn-sm" id="btn-add-drive-main">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>创建盘符</span>
+                            </button>
+                        </div>
+                        <div class="drives-grid" id="drives-grid">
+                            <div class="loading-placeholder">
+                                <div class="spinner"></div>
+                                <span>加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Browser (initially hidden until drive is selected) -->
+                    <div class="file-browser-container" id="file-browser-container" style="display: none;">
+                        <!-- Toolbar -->
+                        <div class="file-toolbar-main">
+                            <div class="toolbar-left">
+                                <button class="toolbar-btn" id="btn-back" title="返回">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 12H5m7 7l-7-7 7-7"/>
+                                    </svg>
+                                </button>
+                                <nav class="breadcrumb-file" id="breadcrumb-file">
+                                    <span class="breadcrumb-item">文件管理</span>
+                                </nav>
+                            </div>
+                            <div class="toolbar-right">
+                                <button class="toolbar-btn" id="btn-new-folder" title="新建文件夹">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                        <path d="M12 11v6m-3-3h6"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn" id="btn-upload-file" title="上传文件">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m14-7l-5-5-5 5m5-5v12"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn" id="btn-download" title="下载" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn" id="btn-delete" title="删除" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 6h18m-2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn" id="btn-rename" title="重命名" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <div class="toolbar-divider"></div>
+                                <button class="toolbar-btn" id="btn-view-grid" title="网格视图">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="7"/>
+                                        <rect x="14" y="3" width="7" height="7"/>
+                                        <rect x="14" y="14" width="7" height="7"/>
+                                        <rect x="3" y="14" width="7" height="7"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn active" id="btn-view-list" title="列表视图">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="8" y1="6" x2="21" y2="6"/>
+                                        <line x1="8" y1="12" x2="21" y2="12"/>
+                                        <line x1="8" y1="18" x2="21" y2="18"/>
+                                        <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                        <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                                    </svg>
+                                </button>
+                                <button class="toolbar-btn" id="btn-refresh" title="刷新">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 4v6h6M23 20v-6h-6"/>
+                                        <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- File List -->
+                        <div class="file-list view-list" id="file-list">
+                            <!-- Files will be dynamically inserted here -->
                         </div>
                     </div>
                 </section>
@@ -312,8 +471,107 @@
         </div>
     </div>
 
+    <!-- Context Menu -->
+    <div class="context-menu" id="context-menu" style="display: none;">
+        <div class="context-menu-item" data-action="open">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span>打开</span>
+        </div>
+        <div class="context-menu-item" data-action="download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/>
+            </svg>
+            <span>下载</span>
+        </div>
+        <div class="context-menu-item" data-action="rename">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span>重命名</span>
+        </div>
+        <div class="context-menu-item" data-action="move">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+            </svg>
+            <span>移动到...</span>
+        </div>
+        <div class="context-menu-item" data-action="copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            <span>复制到...</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="share">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            <span>分享</span>
+        </div>
+        <div class="context-menu-item" data-action="preview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <span>预览</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item context-menu-item-danger" data-action="delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18m-2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            </svg>
+            <span>删除</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="properties">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>属性</span>
+        </div>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div class="modal" id="preview-modal">
+        <div class="modal-overlay" id="preview-overlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title" id="preview-title">文件预览</h2>
+                <button class="modal-close" id="preview-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="preview-body">
+                <!-- Preview content will be dynamically inserted -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-preview-close">关闭</button>
+                <button class="btn btn-primary" id="btn-preview-download">下载</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Input (Hidden) -->
+    <input type="file" id="file-upload-input" multiple style="display: none;">
+
     <!-- Scripts -->
+    <script src="scripts/theme-toggle.js"></script>
     <script src="scripts/api-config.js"></script>
+    <script src="scripts/file-manager.js"></script>
     <script type="module" src="scripts/console.js"></script>
 </body>
 </html>

@@ -85,6 +85,8 @@ class ApiClient {
     constructor() {
         this.baseURL = BASE_URL;
         this.apiBase = API_BASE;
+        this.isRefreshing = false; // 刷新锁
+        this.refreshPromise = null; // 刷新Promise,用于等待刷新完成
     }
 
     // 获取存储的token
@@ -103,6 +105,8 @@ class ApiClient {
         if (refreshToken) {
             localStorage.setItem('refresh_token', refreshToken);
         }
+        // 保存token获取时间,用于主动刷新判断
+        localStorage.setItem('token_timestamp', Date.now().toString());
     }
 
     // 清除token
@@ -110,6 +114,7 @@ class ApiClient {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user_info');
+        localStorage.removeItem('token_timestamp');
     }
 
     // 保存用户信息
@@ -123,8 +128,26 @@ class ApiClient {
         return userInfo ? JSON.parse(userInfo) : null;
     }
 
+    // 检查token是否即将过期（提前10分钟刷新）
+    shouldRefreshToken() {
+        const tokenTimestamp = localStorage.getItem('token_timestamp');
+        if (!tokenTimestamp) return false;
+
+        const tokenAge = Date.now() - parseInt(tokenTimestamp);
+        const TOKEN_EXPIRE_TIME = 120 * 60 * 1000; // 120分钟
+        const REFRESH_THRESHOLD = 10 * 60 * 1000; // 提前10分钟刷新
+
+        return tokenAge > (TOKEN_EXPIRE_TIME - REFRESH_THRESHOLD);
+    }
+
     // 通用请求方法
     async request(url, options = {}) {
+        // 检查是否需要主动刷新token
+        if (!options.skipAuth && this.shouldRefreshToken() && this.getRefreshToken()) {
+            console.log('[API] Token即将过期，主动刷新...');
+            await this.refreshToken();
+        }
+
         const defaultHeaders = {
             'Content-Type': 'application/json'
         };
@@ -250,32 +273,53 @@ class ApiClient {
         });
     }
 
-    // 刷新token
+    // 刷新token（带并发控制）
     async refreshToken() {
+        // 如果正在刷新,等待刷新完成
+        if (this.isRefreshing && this.refreshPromise) {
+            console.log('[API] Token刷新进行中,等待完成...');
+            return this.refreshPromise;
+        }
+
         const refreshToken = this.getRefreshToken();
         if (!refreshToken) {
             return false;
         }
 
-        try {
-            const response = await fetch(API_ENDPOINTS.auth.refresh, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ refresh_token: refreshToken })
-            });
+        // 设置刷新锁
+        this.isRefreshing = true;
 
-            if (response.ok) {
-                const data = await response.json();
-                this.saveTokens(data.access_token, data.refresh_token);
-                return true;
+        this.refreshPromise = (async () => {
+            try {
+                console.log('[API] 开始刷新Token...');
+                const response = await fetch(API_ENDPOINTS.auth.refresh, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ refresh_token: refreshToken })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    this.saveTokens(data.access_token, data.refresh_token);
+                    console.log('[API] Token刷新成功');
+                    return true;
+                } else {
+                    console.error('[API] Token刷新失败:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.error('[API] Token刷新异常:', error);
+                return false;
+            } finally {
+                // 释放刷新锁
+                this.isRefreshing = false;
+                this.refreshPromise = null;
             }
-        } catch (error) {
-            console.error('刷新token失败:', error);
-        }
+        })();
 
-        return false;
+        return this.refreshPromise;
     }
 
     // 发送短信验证码
