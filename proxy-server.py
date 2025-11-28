@@ -212,11 +212,14 @@ if __name__ == '__main__':
     import os
     domain = os.environ.get('DOMAIN', 'localhost')
     proxy_port = os.environ.get('PROXY_PORT', '3001')
-    
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+
     print('启动 CORS 代理服务器...')
     print(f'前端地址: http://{domain}:{proxy_port}')
     print(f'API 代理: http://{domain}:{proxy_port}/api/aisr-process')
     print(f'后端 API: {API_BASE_URL}')
+    print(f'调试模式: {debug_mode}')
     print('-' * 50)
-    
-    app.run(host='0.0.0.0', port=3001, debug=True)
+
+    # 生产环境关闭debug模式，避免文件变化触发自动重载
+    app.run(host='0.0.0.0', port=3001, debug=debug_mode)

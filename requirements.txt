@@ -1,18 +1,17 @@
 # Python 依赖列表
 # 用于 yuntucv_web 项目的代理服务器
-# 兼容 Python 3.6+ 版本
+# 安装命令: pip3 install -r requirements.txt
 
-# Web 框架 - 使用兼容较低Python版本的版本
+# Web 框架
 Flask==2.2.5
 flask-cors==3.0.10
+Werkzeug==2.2.3
 
-# HTTP 请求库 - 使用兼容版本
+# HTTP 请求库
 requests==2.28.2
 
-# 图像处理 - 使用兼容版本
+# 图像处理
 Pillow==9.5.0
-# EXR 支持需要 OpenEXR
-OpenEXR==1.3.9
 
 # 其他标准库依赖（Python 内置，无需安装）
 # - json
@@ -20,6 +19,7 @@ OpenEXR==1.3.9
 # - base64
 # - io
 
-# 可选：用于生产环境部署
-# gunicorn==20.1.0
-# gevent==22.10.2
+# 注意：
+# - EXR 支持已禁用，不需要 OpenEXR
+# - 生产环境建议使用 gunicorn 或 uWSGI
+# - 本项目默认使用 Flask 内置服务器
